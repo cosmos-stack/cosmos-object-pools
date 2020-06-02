@@ -1,0 +1,455 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cosmos.Extensions.ObjectPools</name>
+    </assembly>
+    <members>
+        <member name="T:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1">
+            <summary>
+            Interface for ObjectPool
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Policy">
+            <summary>
+            Gets policy
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.IsAvailable">
+            <summary>
+            Is available<br />
+            是否可用
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.UnavailableException">
+            <summary>
+            Unavailable exception<br />
+            不可用错误
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.UnavailableTime">
+            <summary>
+            Unavailable time<br />
+            不可用时间
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.SetUnavailable(System.Exception)">
+            <summary>
+            Set the object pool to be unavailable,
+            and then Get/GetAsync will report an error,
+            and at the same time start the background regular check service to restore availability.<br />
+            将对象池设置为不可用，后续 Get/GetAsync 均会报错，同时启动后台定时检查服务恢复可用
+            </summary>
+            <param name="exception"></param>
+            <returns>由【可用】变成【不可用】时返回true，否则返回false</returns>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Statistics">
+            <summary>
+            Statistics of objects in the object pool.<br />
+            统计对象池中的对象
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.StatisticsFully">
+            <summary>
+            Completely count the objects in the object pool.<br />
+            统计对象池中的对象（完整)
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Get(System.Nullable{System.TimeSpan})">
+            <summary>
+            Access to resources.<br />
+            获取资源
+            </summary>
+            <param name="timeout">超时</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.GetAsync">
+            <summary>
+            Access to resources async.<br />
+            获取资源
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Return(Cosmos.Disposables.ObjectPools.Object{`0},System.Boolean)">
+            <summary>
+            Return the resource after use.<br />
+            使用完毕后，归还资源
+            </summary>
+            <param name="obj">对象</param>
+            <param name="isReset">是否重新创建</param>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1">
+            <summary>
+            Interface for policy
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.Name">
+            <summary>
+            Gets or sets name of policy<br />
+            名称
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.PoolSize">
+            <summary>
+            Size of pool<br />
+            池容量
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.SyncGetTimeout">
+            <summary>
+            Timeout value of sync get<br />
+            默认获取超时设置
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.IdleTimeout">
+            <summary>
+            Idle time, if it is exceeded during acquisition, it will be recreated.<br />
+            空闲时间，获取时若超出，则重新创建
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.AsyncGetCapacity">
+            <summary>
+            Get queue size asynchronously, less than or equal to 0 does not take effect.<br />
+            异步获取排队队列大小，小于等于0不生效
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.IsThrowGetTimeoutException">
+            <summary>
+            Whether to throw an exception after getting timeout.<br />
+            获取超时后，是否抛出异常
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.IsAutoDisposeWithSystem">
+            <summary>
+            Listen to AppDomain.CurrentDomain.ProcessExit/Console.CancelKeyPress event automatically released.<br />
+            监听 AppDomain.CurrentDomain.ProcessExit/Console.CancelKeyPress 事件自动释放
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.CheckAvailableInterval">
+            <summary>
+            Background interval for regularly checking availability in seconds.<br />
+            后台定时检查可用性间隔秒数
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnCreate">
+            <summary>
+            On create event<br />
+            对象池的对象被创建时
+            </summary>
+            <returns>返回被创建的对象</returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnDestroy(`0)">
+            <summary>
+            On destroy event<br />
+            销毁对象
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnGetTimeout">
+            <summary>
+            On get timeout event<br />
+            从对象池获取对象超时的时候触发，通过该方法统计
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnGet(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On get event<br />
+            从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnGetAsync(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On get async event<br />
+            从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnReturn(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On return event<br />
+            归还对象给对象池的时候触发
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnCheckAvailable(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On check available event<br />
+            检查可用性
+            </summary>
+            <param name="obj">资源对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnAvailable">
+            <summary>
+            On available event<br />
+            事件：可用时触发
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnUnavailable">
+            <summary>
+            On unavailable event<br />
+            事件：不可用时触发
+            </summary>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.Core.Displayer">
+            <summary>
+            Display helper
+            </summary>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.Core.ExceptionNew">
+            <summary>
+            Exception helper
+            </summary>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.DefaultPolicy`1">
+            <summary>
+            Default policy
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.PoolSize">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.SyncGetTimeout">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.IdleTimeout">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.AsyncGetCapacity">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.IsThrowGetTimeoutException">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.IsAutoDisposeWithSystem">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.CheckAvailableInterval">
+            <inheritdoc />
+        </member>
+        <member name="F:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.CreateObject">
+            <summary>
+            Create object
+            </summary>
+        </member>
+        <member name="F:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnGetObject">
+            <summary>
+            On get object
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnDestroy(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnGet(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnGetAsync(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnGetTimeout">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnReturn(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnCheckAvailable(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnAvailable">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnUnavailable">
+            <inheritdoc />
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.Object`1">
+            <summary>
+            Recyclable resource objects.<br />
+            可回收资源对象
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Object`1.InitWith(Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{`0},System.Int32,`0)">
+            <summary>
+            Use the specified object pool for initialization.<br />
+            使用指定对象池进行初始化
+            </summary>
+            <param name="pool"></param>
+            <param name="id"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.Pool">
+            <summary>
+            Owning object pool<br />
+            所属对象池
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.Id">
+            <summary>
+            Unique identifier in the object pool.<br />
+            在对象池中的唯一标识
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.Value">
+            <summary>
+            Resource object.<br />
+            资源对象
+            </summary>
+        </member>
+        <member name="F:Cosmos.Disposables.ObjectPools.Object`1._getTimes">
+            <summary>
+            Total times acquired
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.GetTimes">
+            <summary>
+            Total times acquired<br />
+            被获取的总次数
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.LastGetTime">
+            <summary>
+            Time of last acquisition.<br />
+            最后一次被获取的时间
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.LastReturnTime">
+            <summary>
+            The time when it was last returned.<br />
+            最后归还时的时间
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.CreateTime">
+            <summary>
+            Created time<br />
+            创建时间
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.LastGetThreadId">
+            <summary>
+            Thread ID at last acquisition.<br />
+            最后获取时的线程 Id
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.Object`1.LastReturnThreadId">
+            <summary>
+            The thread ID at the time of the last return.<br />
+            最后归还时的线程 Id
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Object`1.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Object`1.ResetValue">
+            <summary>
+            Reset Value<br />
+            重置 Value 值
+            </summary>
+        </member>
+        <member name="F:Cosmos.Disposables.ObjectPools.Object`1._isReturned">
+            <summary>
+            Is returned
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Object`1.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.ObjectPool`1">
+            <summary>
+            Object pool<br />
+            对象池
+            </summary>
+            <typeparam name="T">对象类型</typeparam>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPool`1.Policy">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.#ctor(System.Int32,System.Func{`0},System.Action{Cosmos.Disposables.ObjectPools.Object{`0}})">
+            <summary>
+            Create a new instance of <see cref="T:Cosmos.Disposables.ObjectPools.ObjectPool`1"/>.<br />
+            创建对象池
+            </summary>
+            <param name="poolSize">池大小</param>
+            <param name="createObject">池内对象的创建委托</param>
+            <param name="onGetObject">获取池内对象成功后，进行使用前操作</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.#ctor(Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{`0})">
+            <summary>
+            Create a new instance of <see cref="T:Cosmos.Disposables.ObjectPools.ObjectPool`1"/>.<br />
+            创建对象池
+            </summary>
+            <param name="policy">策略</param>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPool`1.IsAvailable">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPool`1.UnavailableException">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPool`1.UnavailableTime">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.SetUnavailable(System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.CheckAvailable(System.Int32)">
+            <summary>
+            Check availability regularly in the background.<br />
+            后台定时检查可用性
+            </summary>
+            <param name="interval"></param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.RestoreToAvailable">
+            <summary>
+            Restore to available<br />
+            恢复为可用
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.LiveCheckAvailable">
+            <summary>
+            Live check available
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPool`1.Statistics">
+            <inheritdoc />
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPool`1.StatisticsFully">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.GetOrCreateFreeObject(System.Boolean)">
+            <summary>
+            Get or create available resources<br />
+            获取可用资源，或创建资源
+            </summary>
+            <param name="checkAvailable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.Get(System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.GetAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.Return(Cosmos.Disposables.ObjectPools.Object{`0},System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.ObjectPool`1.GetSyncQueueInfo">
+            <summary>
+            Get sync queue info
+            </summary>
+        </member>
+    </members>
+</doc>
