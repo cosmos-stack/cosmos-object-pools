@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{946B7C7A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cosmos.ObjectPools", "src\Cosmos.ObjectPools\Cosmos.ObjectPools.csproj", "{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.BasicSample", "samples\Samples.BasicSample\Samples.BasicSample.csproj", "{D2B12B8B-A060-427C-8205-D19BE5B850C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,11 +37,16 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{560A09EA-9858-4EE7-95C7-80DCC5F93C0D} = {DD1E6C10-5267-4354-895C-DCAE95F643B5}
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F} = {28AE249C-7974-40FB-B271-F146D4359BC8}
+		{D2B12B8B-A060-427C-8205-D19BE5B850C8} = {85EE02B9-5483-4FE0-9740-FA5E690388C3}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2B12B8B-A060-427C-8205-D19BE5B850C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2B12B8B-A060-427C-8205-D19BE5B850C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2B12B8B-A060-427C-8205-D19BE5B850C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2B12B8B-A060-427C-8205-D19BE5B850C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
