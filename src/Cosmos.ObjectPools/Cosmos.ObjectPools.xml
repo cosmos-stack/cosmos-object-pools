@@ -451,5 +451,212 @@
             Get sync queue info
             </summary>
         </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.ObjectPoolManager">
+            <summary>
+            Object pool manager
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Get``1">
+            <summary>
+            To get the specified type of object pool.<br />
+            获取指定类型的对象池。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"> Unknown type.</exception>
+            <exception cref="T:System.ArgumentException">Unable to get the specified type of object pool.</exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Get``1(System.String)">
+            <summary>
+            To get the specified type and name of object pool.<br />
+            获取指定类型和名称的对象池。
+            </summary>
+            <param name="name"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"> Unknown type or name.</exception>
+            <exception cref="T:System.ArgumentException">Unable to get the specified type and name of object pool.</exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="pool"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="poolFunc"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="pool"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="poolFunc"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            To get or create a specified type of object pool.
+            </summary>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+            <summary>
+            To get or create a specified type of object pool.
+            </summary>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+            <summary>
+            To get or create a specified type of object pool.
+            </summary>
+            <param name="insteadOfFactory"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            To get or create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+            <summary>
+            To get or create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+            <summary>
+            To get or create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="insteadOfFactory"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Contains``1">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Contains``1(System.String)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="name"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Contains(System.Type)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Contains(System.String)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Contains(System.Type,System.String)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

@@ -8,7 +8,11 @@ namespace Samples.BasicSample
     {
         static void Main(string[] args)
         {
-            var pool = new ObjectPool<SampleModel>(10, CreateObject, OnGetObject);
+            //var pool = new ObjectPool<SampleModel>(10, CreateObject, OnGetObject);
+
+            ObjectPoolManager.Create("OK", 10,CreateObject,OnGetObject);
+
+            var pool = ObjectPoolManager.Get<SampleModel>("OK");
 
             for (var i = 0; i < 100; i++)
             {
