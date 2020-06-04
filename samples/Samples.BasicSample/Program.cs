@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Cosmos.Disposables.ObjectPools;
+using Cosmos.Disposables.ObjectPools.Managed;
 
 namespace Samples.BasicSample
 {
@@ -11,13 +12,18 @@ namespace Samples.BasicSample
             //var pool = new ObjectPool<SampleModel>(10, CreateObject, OnGetObject);
 
             //ObjectPoolManager.Create("OK", 10, CreateObject, OnGetObject);
-            
-            ObjectPoolManager.ManagedModels.Register<CustomModel>();
-            ObjectPoolManager.ManagedModels.Create<SampleModel, CustomModel>("OK", 10, CreateObject, OnGetObject);
+
+            // ObjectPoolManager.ManagedModels.Register<CustomModel>();
+            // ObjectPoolManager.ManagedModels.Create<SampleModel, CustomModel>("OK", 10, CreateObject, OnGetObject);
+
+            ObjectPoolManager.Managed<CustomModel>.Register();
+            ObjectPoolManager.Managed<CustomModel>.Create("OK", 10, CreateObject, OnGetObject);
 
             //var pool = ObjectPoolManager.Get<SampleModel>("OK");
 
-            var pool = ObjectPoolManager.ManagedModels.Get<SampleModel, CustomModel>("OK");
+            //var pool = ObjectPoolManager.ManagedModels.Get<SampleModel, CustomModel>("OK");
+
+            var pool = ObjectPoolManager.Managed<CustomModel>.Get<SampleModel>("OK");
 
             for (var i = 0; i < 100; i++)
             {
@@ -52,4 +58,6 @@ namespace Samples.BasicSample
     {
         public string Value { get; set; } = DateTime.Now.ToString("yyyy MM dd HH mm ss fff");
     }
+
+    public class CustomModel : ObjectPoolManagedModel { }
 }
