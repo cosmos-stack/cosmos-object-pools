@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Cosmos.Disposables.ObjectPools.Abstractions
+namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
     /// Interface for ObjectPool

@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Cosmos.Asynchronous;
-using Cosmos.Disposables.ObjectPools.Abstractions;
 using Cosmos.Reflection;
 
 namespace Cosmos.Disposables.ObjectPools

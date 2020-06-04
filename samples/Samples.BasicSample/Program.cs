@@ -10,9 +10,14 @@ namespace Samples.BasicSample
         {
             //var pool = new ObjectPool<SampleModel>(10, CreateObject, OnGetObject);
 
-            ObjectPoolManager.Create("OK", 10,CreateObject,OnGetObject);
+            //ObjectPoolManager.Create("OK", 10, CreateObject, OnGetObject);
+            
+            ObjectPoolManager.ManagedModels.Register<CustomModel>();
+            ObjectPoolManager.ManagedModels.Create<SampleModel, CustomModel>("OK", 10, CreateObject, OnGetObject);
 
-            var pool = ObjectPoolManager.Get<SampleModel>("OK");
+            //var pool = ObjectPoolManager.Get<SampleModel>("OK");
+
+            var pool = ObjectPoolManager.ManagedModels.Get<SampleModel, CustomModel>("OK");
 
             for (var i = 0; i < 100; i++)
             {
@@ -24,7 +29,7 @@ namespace Samples.BasicSample
                         //Console.WriteLine($"ThreadId={Thread.CurrentThread.ManagedThreadId}, Value={item.Value.Value}");
                         pool.Return(item);
                     }
-                    
+
                     Console.WriteLine(pool.StatisticsFully);
                 }).Start();
             }

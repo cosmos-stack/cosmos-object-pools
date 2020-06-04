@@ -4,194 +4,6 @@
         <name>Cosmos.Extensions.ObjectPools</name>
     </assembly>
     <members>
-        <member name="T:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1">
-            <summary>
-            Interface for ObjectPool
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Policy">
-            <summary>
-            Gets policy
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.IsAvailable">
-            <summary>
-            Is available<br />
-            是否可用
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.UnavailableException">
-            <summary>
-            Unavailable exception<br />
-            不可用错误
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.UnavailableTime">
-            <summary>
-            Unavailable time<br />
-            不可用时间
-            </summary>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.SetUnavailable(System.Exception)">
-            <summary>
-            Set the object pool to be unavailable,
-            and then Get/GetAsync will report an error,
-            and at the same time start the background regular check service to restore availability.<br />
-            将对象池设置为不可用，后续 Get/GetAsync 均会报错，同时启动后台定时检查服务恢复可用
-            </summary>
-            <param name="exception"></param>
-            <returns>由【可用】变成【不可用】时返回true，否则返回false</returns>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Statistics">
-            <summary>
-            Statistics of objects in the object pool.<br />
-            统计对象池中的对象
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.StatisticsFully">
-            <summary>
-            Completely count the objects in the object pool.<br />
-            统计对象池中的对象（完整)
-            </summary>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Get(System.Nullable{System.TimeSpan})">
-            <summary>
-            Access to resources.<br />
-            获取资源
-            </summary>
-            <param name="timeout">超时</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.GetAsync">
-            <summary>
-            Access to resources async.<br />
-            获取资源
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool`1.Return(Cosmos.Disposables.ObjectPools.Object{`0},System.Boolean)">
-            <summary>
-            Return the resource after use.<br />
-            使用完毕后，归还资源
-            </summary>
-            <param name="obj">对象</param>
-            <param name="isReset">是否重新创建</param>
-        </member>
-        <member name="T:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1">
-            <summary>
-            Interface for policy
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.Name">
-            <summary>
-            Gets or sets name of policy<br />
-            名称
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.PoolSize">
-            <summary>
-            Size of pool<br />
-            池容量
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.SyncGetTimeout">
-            <summary>
-            Timeout value of sync get<br />
-            默认获取超时设置
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.IdleTimeout">
-            <summary>
-            Idle time, if it is exceeded during acquisition, it will be recreated.<br />
-            空闲时间，获取时若超出，则重新创建
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.AsyncGetCapacity">
-            <summary>
-            Get queue size asynchronously, less than or equal to 0 does not take effect.<br />
-            异步获取排队队列大小，小于等于0不生效
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.IsThrowGetTimeoutException">
-            <summary>
-            Whether to throw an exception after getting timeout.<br />
-            获取超时后，是否抛出异常
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.IsAutoDisposeWithSystem">
-            <summary>
-            Listen to AppDomain.CurrentDomain.ProcessExit/Console.CancelKeyPress event automatically released.<br />
-            监听 AppDomain.CurrentDomain.ProcessExit/Console.CancelKeyPress 事件自动释放
-            </summary>
-        </member>
-        <member name="P:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.CheckAvailableInterval">
-            <summary>
-            Background interval for regularly checking availability in seconds.<br />
-            后台定时检查可用性间隔秒数
-            </summary>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnCreate">
-            <summary>
-            On create event<br />
-            对象池的对象被创建时
-            </summary>
-            <returns>返回被创建的对象</returns>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnDestroy(`0)">
-            <summary>
-            On destroy event<br />
-            销毁对象
-            </summary>
-            <param name="obj">资源对象</param>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnGetTimeout">
-            <summary>
-            On get timeout event<br />
-            从对象池获取对象超时的时候触发，通过该方法统计
-            </summary>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnGet(Cosmos.Disposables.ObjectPools.Object{`0})">
-            <summary>
-            On get event<br />
-            从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
-            </summary>
-            <param name="obj">资源对象</param>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnGetAsync(Cosmos.Disposables.ObjectPools.Object{`0})">
-            <summary>
-            On get async event<br />
-            从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
-            </summary>
-            <param name="obj">资源对象</param>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnReturn(Cosmos.Disposables.ObjectPools.Object{`0})">
-            <summary>
-            On return event<br />
-            归还对象给对象池的时候触发
-            </summary>
-            <param name="obj">资源对象</param>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnCheckAvailable(Cosmos.Disposables.ObjectPools.Object{`0})">
-            <summary>
-            On check available event<br />
-            检查可用性
-            </summary>
-            <param name="obj">资源对象</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnAvailable">
-            <summary>
-            On available event<br />
-            事件：可用时触发
-            </summary>
-        </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Abstractions.IPolicy`1.OnUnavailable">
-            <summary>
-            On unavailable event<br />
-            事件：不可用时触发
-            </summary>
-        </member>
         <member name="T:Cosmos.Disposables.ObjectPools.Core.Displayer">
             <summary>
             Display helper
@@ -269,6 +81,289 @@
         <member name="M:Cosmos.Disposables.ObjectPools.DefaultPolicy`1.OnUnavailable">
             <inheritdoc />
         </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.IObjectPool`1">
+            <summary>
+            Interface for ObjectPool
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IObjectPool`1.Policy">
+            <summary>
+            Gets policy
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IObjectPool`1.IsAvailable">
+            <summary>
+            Is available<br />
+            是否可用
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IObjectPool`1.UnavailableException">
+            <summary>
+            Unavailable exception<br />
+            不可用错误
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IObjectPool`1.UnavailableTime">
+            <summary>
+            Unavailable time<br />
+            不可用时间
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IObjectPool`1.SetUnavailable(System.Exception)">
+            <summary>
+            Set the object pool to be unavailable,
+            and then Get/GetAsync will report an error,
+            and at the same time start the background regular check service to restore availability.<br />
+            将对象池设置为不可用，后续 Get/GetAsync 均会报错，同时启动后台定时检查服务恢复可用
+            </summary>
+            <param name="exception"></param>
+            <returns>由【可用】变成【不可用】时返回true，否则返回false</returns>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IObjectPool`1.Statistics">
+            <summary>
+            Statistics of objects in the object pool.<br />
+            统计对象池中的对象
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IObjectPool`1.StatisticsFully">
+            <summary>
+            Completely count the objects in the object pool.<br />
+            统计对象池中的对象（完整)
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IObjectPool`1.Get(System.Nullable{System.TimeSpan})">
+            <summary>
+            Access to resources.<br />
+            获取资源
+            </summary>
+            <param name="timeout">超时</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IObjectPool`1.GetAsync">
+            <summary>
+            Access to resources async.<br />
+            获取资源
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IObjectPool`1.Return(Cosmos.Disposables.ObjectPools.Object{`0},System.Boolean)">
+            <summary>
+            Return the resource after use.<br />
+            使用完毕后，归还资源
+            </summary>
+            <param name="obj">对象</param>
+            <param name="isReset">是否重新创建</param>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.IPolicy`1">
+            <summary>
+            Interface for policy
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.Name">
+            <summary>
+            Gets or sets name of policy<br />
+            名称
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.PoolSize">
+            <summary>
+            Size of pool<br />
+            池容量
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.SyncGetTimeout">
+            <summary>
+            Timeout value of sync get<br />
+            默认获取超时设置
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.IdleTimeout">
+            <summary>
+            Idle time, if it is exceeded during acquisition, it will be recreated.<br />
+            空闲时间，获取时若超出，则重新创建
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.AsyncGetCapacity">
+            <summary>
+            Get queue size asynchronously, less than or equal to 0 does not take effect.<br />
+            异步获取排队队列大小，小于等于0不生效
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.IsThrowGetTimeoutException">
+            <summary>
+            Whether to throw an exception after getting timeout.<br />
+            获取超时后，是否抛出异常
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.IsAutoDisposeWithSystem">
+            <summary>
+            Listen to AppDomain.CurrentDomain.ProcessExit/Console.CancelKeyPress event automatically released.<br />
+            监听 AppDomain.CurrentDomain.ProcessExit/Console.CancelKeyPress 事件自动释放
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.IPolicy`1.CheckAvailableInterval">
+            <summary>
+            Background interval for regularly checking availability in seconds.<br />
+            后台定时检查可用性间隔秒数
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnCreate">
+            <summary>
+            On create event<br />
+            对象池的对象被创建时
+            </summary>
+            <returns>返回被创建的对象</returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnDestroy(`0)">
+            <summary>
+            On destroy event<br />
+            销毁对象
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnGetTimeout">
+            <summary>
+            On get timeout event<br />
+            从对象池获取对象超时的时候触发，通过该方法统计
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnGet(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On get event<br />
+            从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnGetAsync(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On get async event<br />
+            从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnReturn(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On return event<br />
+            归还对象给对象池的时候触发
+            </summary>
+            <param name="obj">资源对象</param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnCheckAvailable(Cosmos.Disposables.ObjectPools.Object{`0})">
+            <summary>
+            On check available event<br />
+            检查可用性
+            </summary>
+            <param name="obj">资源对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnAvailable">
+            <summary>
+            On available event<br />
+            事件：可用时触发
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.IPolicy`1.OnUnavailable">
+            <summary>
+            On unavailable event<br />
+            事件：不可用时触发
+            </summary>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel">
+            <summary>
+            Interface of object pool managed model
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.GetDefaultTyped``1">
+            <summary>
+            To get the specified type of object pool.<br />
+            获取指定类型的对象池。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"> Unknown type.</exception>
+            <exception cref="T:System.ArgumentException">Unable to get the specified type of object pool.</exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.Get``1(System.String)">
+            <summary>
+            To get the specified type and name of object pool.<br />
+            获取指定类型和名称的对象池。
+            </summary>
+            <param name="name"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"> Unknown type or name.</exception>
+            <exception cref="T:System.ArgumentException">Unable to get the specified type and name of object pool.</exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.AddOrUpdate(System.Type,System.String,System.IDisposable)">
+            <summary>
+            Add or update
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <param name="pool"></param>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.Remove(System.Type,System.String)">
+            <summary>
+            Remove
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.Contains(System.Type,System.String)">
+            <summary>
+            Contains
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.ContainsDefaultTyped(System.Type)">
+            <summary>
+            Contains default named type object pool
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.IObjectPoolManagedModel.ContainsNamedSet(System.String)">
+            <summary>
+            Contains default named type object pool
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel">
+            <summary>
+            Object pool managed model
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.#ctor">
+            <summary>
+            Create a new instance of <see cref="T:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel"/>.
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.GetDefaultTyped``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.Get``1(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.AddOrUpdate(System.Type,System.String,System.IDisposable)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.Remove(System.Type,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.Contains(System.Type,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.ContainsDefaultTyped(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.Managed.ObjectPoolManagedModel.ContainsNamedSet(System.String)">
+            <inheritdoc />
+        </member>
         <member name="T:Cosmos.Disposables.ObjectPools.Object`1">
             <summary>
             Recyclable resource objects.<br />
@@ -276,7 +371,7 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.Object`1.InitWith(Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{`0},System.Int32,`0)">
+        <member name="M:Cosmos.Disposables.ObjectPools.Object`1.InitWith(Cosmos.Disposables.ObjectPools.IObjectPool{`0},System.Int32,`0)">
             <summary>
             Use the specified object pool for initialization.<br />
             使用指定对象池进行初始化
@@ -381,7 +476,7 @@
             <param name="createObject">池内对象的创建委托</param>
             <param name="onGetObject">获取池内对象成功后，进行使用前操作</param>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.#ctor(Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{`0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPool`1.#ctor(Cosmos.Disposables.ObjectPools.IPolicy{`0})">
             <summary>
             Create a new instance of <see cref="T:Cosmos.Disposables.ObjectPools.ObjectPool`1"/>.<br />
             创建对象池
@@ -455,6 +550,9 @@
             <summary>
             Object pool manager
             </summary>
+            <summary>
+            Object pool manager
+            </summary>
         </member>
         <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Get``1">
             <summary>
@@ -499,7 +597,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(Cosmos.Disposables.ObjectPools.IPolicy{``0})">
             <summary>
             Create a specified type of object pool.
             </summary>
@@ -507,7 +605,7 @@
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(Cosmos.Disposables.ObjectPools.IObjectPool{``0})">
             <summary>
             Create a specified type of object pool.
             </summary>
@@ -517,7 +615,7 @@
             <exception cref="T:System.ArgumentNullException"></exception>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
             <summary>
             Create a specified type of object pool.
             </summary>
@@ -527,7 +625,7 @@
             <exception cref="T:System.ArgumentNullException"></exception>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,Cosmos.Disposables.ObjectPools.IPolicy{``0})">
             <summary>
             Create a specified type and name of object pool.
             </summary>
@@ -537,7 +635,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,Cosmos.Disposables.ObjectPools.IObjectPool{``0})">
             <summary>
             Create a specified type and name of object pool.
             </summary>
@@ -548,7 +646,7 @@
             <exception cref="T:System.ArgumentNullException"></exception>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.Create``1(System.String,System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
             <summary>
             Create a specified type and name of object pool.
             </summary>
@@ -569,7 +667,7 @@
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(Cosmos.Disposables.ObjectPools.IPolicy{``0})">
             <summary>
             To get or create a specified type of object pool.
             </summary>
@@ -577,7 +675,7 @@
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
             <summary>
             To get or create a specified type of object pool.
             </summary>
@@ -597,7 +695,7 @@
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,Cosmos.Disposables.ObjectPools.Abstractions.IPolicy{``0})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,Cosmos.Disposables.ObjectPools.IPolicy{``0})">
             <summary>
             To get or create a specified type and name of object pool.
             </summary>
@@ -606,7 +704,7 @@
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,System.Func{Cosmos.Disposables.ObjectPools.Abstractions.IObjectPool{``0}})">
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.GetOrCreate``1(System.String,System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
             <summary>
             To get or create a specified type and name of object pool.
             </summary>
@@ -654,6 +752,257 @@
             Contains<br />
             查看是否包含
             </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels">
+            <summary>
+            Managed models
+            </summary>
+        </member>
+        <member name="P:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Default">
+            <summary>
+            Gets default object pool managed model
+            </summary>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Register``1">
+            <summary>
+            Register IObjectPoolManagedModel type
+            </summary>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Register``1(System.Func{``0})">
+            <summary>
+            Register IObjectPoolManagedModel type
+            </summary>
+            <param name="factory"></param>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Get``2">
+            <summary>
+            To get the specified type of object pool.<br />
+            获取指定类型的对象池。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"> Unknown type.</exception>
+            <exception cref="T:System.ArgumentException">Unable to get the specified type of object pool.</exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Get``2(System.String)">
+            <summary>
+            To get the specified type and name of object pool.<br />
+            获取指定类型和名称的对象池。
+            </summary>
+            <param name="name"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"> Unknown type or name.</exception>
+            <exception cref="T:System.ArgumentException">Unable to get the specified type and name of object pool.</exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(System.String,System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(Cosmos.Disposables.ObjectPools.IPolicy{``0})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(Cosmos.Disposables.ObjectPools.IObjectPool{``0})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="pool"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
+            <summary>
+            Create a specified type of object pool.
+            </summary>
+            <param name="poolFunc"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(System.String,Cosmos.Disposables.ObjectPools.IPolicy{``0})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(System.String,Cosmos.Disposables.ObjectPools.IObjectPool{``0})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="pool"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Create``2(System.String,System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
+            <summary>
+            Create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="poolFunc"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.GetOrCreate``2(System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            To get or create a specified type of object pool.
+            </summary>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.GetOrCreate``2(Cosmos.Disposables.ObjectPools.IPolicy{``0})">
+            <summary>
+            To get or create a specified type of object pool.
+            </summary>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.GetOrCreate``2(System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
+            <summary>
+            To get or create a specified type of object pool.
+            </summary>
+            <param name="insteadOfFactory"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.GetOrCreate``2(System.String,System.Int32,System.Func{``0},System.Action{Cosmos.Disposables.ObjectPools.Object{``0}})">
+            <summary>
+            To get or create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="poolSize"></param>
+            <param name="createObjectFunc"></param>
+            <param name="getObjectHandler"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.GetOrCreate``2(System.String,Cosmos.Disposables.ObjectPools.IPolicy{``0})">
+            <summary>
+            To get or create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="policy"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.GetOrCreate``2(System.String,System.Func{Cosmos.Disposables.ObjectPools.IObjectPool{``0}})">
+            <summary>
+            To get or create a specified type and name of object pool.
+            </summary>
+            <param name="name"></param>
+            <param name="insteadOfFactory"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Contains``2">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Contains``2(System.String)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="name"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TManagedModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Contains(System.Type,System.Type)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="managedModelType"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Contains(System.Type,System.String)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="managedModelType"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cosmos.Disposables.ObjectPools.ObjectPoolManager.ManagedModels.Contains(System.Type,System.Type,System.String)">
+            <summary>
+            Contains<br />
+            查看是否包含
+            </summary>
+            <param name="managedModelType"></param>
             <param name="type"></param>
             <param name="name"></param>
             <returns></returns>

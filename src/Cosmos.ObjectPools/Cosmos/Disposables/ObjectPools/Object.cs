@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using System.Threading;
-using Cosmos.Disposables.ObjectPools.Abstractions;
 
 namespace Cosmos.Disposables.ObjectPools
 {

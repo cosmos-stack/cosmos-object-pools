@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Cosmos.Disposables.ObjectPools.Abstractions;
 using Cosmos.Disposables.ObjectPools.Core;
 
 namespace Cosmos.Disposables.ObjectPools
