@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using Cosmos.Disposables.ObjectPools.Managed;
+using Cosmos.Reflection;
 
 // ReSharper disable InconsistentNaming
 
@@ -74,6 +76,64 @@ namespace Cosmos.Disposables.ObjectPools
                 return _managedModels.TryAdd(typeof(TManagedModel), instance);
             }
 
+            /// <summary>
+            /// Register IObjectPoolManagedModel type
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentException"></exception>
+            public static bool Register(Type managedModelType)
+            {
+                if (managedModelType is null)
+                    throw new ArgumentNullException(nameof(managedModelType));
+
+                if (DefaultManagedModelType(managedModelType))
+                    throw new ArgumentException($"The default type '{nameof(ObjectPoolManagedModel)}' does not provide registration.");
+
+                if (_managedModels.ContainsKey(managedModelType))
+                    throw new ArgumentException("The type has been registered.");
+
+                if (!IsValidManagedModel(managedModelType))
+                    throw new ArgumentException("This type is not a valid IObjectPoolManagedModel instance.");
+
+                var instance = Types.CreateInstance(managedModelType) as IObjectPoolManagedModel;
+
+                return _managedModels.TryAdd(managedModelType, instance);
+            }
+
+            /// <summary>
+            /// Register IObjectPoolManagedModel type
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="factory"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="ArgumentException"></exception>
+            public static bool Register(Type managedModelType, Func<IObjectPoolManagedModel> factory)
+            {
+                if (managedModelType is null)
+                    throw new ArgumentNullException(nameof(managedModelType));
+
+                if (factory is null)
+                    throw new ArgumentNullException(nameof(factory));
+
+                if (DefaultManagedModelType(managedModelType))
+                    throw new ArgumentException($"The default type '{nameof(ObjectPoolManagedModel)}' does not provide registration.");
+
+                if (_managedModels.ContainsKey(managedModelType))
+                    throw new ArgumentException("The type has been registered.");
+
+                if (!IsValidManagedModel(managedModelType))
+                    throw new ArgumentException("This type is not a valid IObjectPoolManagedModel instance.");
+
+                var instance = factory();
+
+                if (instance is null)
+                    throw new ArgumentException("Cannot create a valid instance through the factory method of IObjectPoolManagedModel.");
+
+                return _managedModels.TryAdd(managedModelType, instance);
+            }
+
             #endregion
 
             #region Get
@@ -107,6 +167,37 @@ namespace Cosmos.Disposables.ObjectPools
             {
                 var model = GetModel<TManagedModel>();
                 return model.Get<T>(name);
+            }
+
+            /// <summary>
+            /// To get the specified type of object pool.<br />
+            /// 获取指定类型的对象池。
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            /// <exception cref="InvalidOperationException"> Unknown type.</exception>
+            /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
+            public static IObjectPool Get(Type managedModelType, Type type)
+            {
+                var model = GetModel(managedModelType);
+                return model.GetDefaultTyped(type);
+            }
+
+            /// <summary>
+            /// To get the specified type and name of object pool.<br />
+            /// 获取指定类型和名称的对象池。
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="name"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
+            /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
+            public static IObjectPool Get(Type managedModelType, Type type, string name)
+            {
+                var model = GetModel(managedModelType);
+                return model.Get(type, name);
             }
 
             #endregion
@@ -177,6 +268,9 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             public static IObjectPool<T> Create<T, TManagedModel>(IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
             {
+                if (policy is null)
+                    throw new ArgumentNullException(nameof(policy));
+
                 var model = GetModel<TManagedModel>();
 
                 if (model.ContainsDefaultTyped(typeof(T)))
@@ -206,10 +300,10 @@ namespace Cosmos.Disposables.ObjectPools
                 if (pool is null)
                     throw new ArgumentNullException(nameof(pool));
 
-                if (model.ContainsDefaultTyped(typeof(T)))
-                    throw new ArgumentException("The specified type of object pool is exist.");
-
                 var type = typeof(T);
+
+                if (model.ContainsDefaultTyped(type))
+                    throw new ArgumentException("The specified type of object pool is exist.");
 
                 UpdateObjectPools(model, type, DefaultName, pool);
 
@@ -232,10 +326,11 @@ namespace Cosmos.Disposables.ObjectPools
                 if (poolFunc is null)
                     throw new ArgumentNullException(nameof(poolFunc));
 
+                var type = typeof(T);
+
                 if (model.ContainsDefaultTyped(typeof(T)))
                     throw new ArgumentException("The specified type of object pool is exist.");
 
-                var type = typeof(T);
                 var pool = poolFunc();
 
                 UpdateObjectPools(model, type, DefaultName, pool);
@@ -319,6 +414,209 @@ namespace Cosmos.Disposables.ObjectPools
 
                 var type = typeof(T);
                 var pool = poolFunc();
+
+                UpdateObjectPools(model, type, name, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type of object pool.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="poolSize"></param>
+            /// <param name="createObjectFunc"></param>
+            /// <param name="getObjectHandler"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            public static IObjectPool Create(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+            {
+                var model = GetModel(managedModelType);
+
+                if (model.ContainsDefaultTyped(type))
+                    throw new ArgumentException("The specified type of object pool is exist.");
+
+                var pool = new ObjectPool(type, poolSize, createObjectFunc, getObjectHandler);
+
+                UpdateObjectPools(model, type, DefaultName, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="name"></param>
+            /// <param name="poolSize"></param>
+            /// <param name="createObjectFunc"></param>
+            /// <param name="getObjectHandler"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            public static IObjectPool Create(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+            {
+                var model = GetModel(managedModelType);
+
+                if (string.IsNullOrWhiteSpace(name))
+                    name = DefaultName;
+
+                if (model.Contains(type, name))
+                    throw new ArgumentException("The specified type or name of object pool is exist.");
+
+                var pool = new ObjectPool(type, poolSize, createObjectFunc, getObjectHandler);
+
+                UpdateObjectPools(model, type, name, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="policy"></param>
+            /// <returns></returns>
+            public static IObjectPool Create(Type managedModelType, IPolicy policy)
+            {
+                if (policy is null)
+                    throw new ArgumentNullException(nameof(policy));
+
+                var model = GetModel(managedModelType);
+
+                if (model.ContainsDefaultTyped(policy.BindingType))
+                    throw new ArgumentException("The specified type of object pool is exist.");
+
+                var type = policy.BindingType;
+                var pool = new ObjectPool(policy);
+
+                UpdateObjectPools(model, type, DefaultName, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="pool"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="ArgumentException"></exception>
+            public static IObjectPool Create(Type managedModelType, IObjectPool pool)
+            {
+                var model = GetModel(managedModelType);
+
+                if (pool is null)
+                    throw new ArgumentNullException(nameof(pool));
+
+                var type = pool.Policy.BindingType;
+
+                if (model.ContainsDefaultTyped(type))
+                    throw new ArgumentException("The specified type of object pool is exist.");
+
+                UpdateObjectPools(model, type, DefaultName, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="poolFunc"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="ArgumentException"></exception>
+            public static IObjectPool Create(Type managedModelType, Func<IObjectPool> poolFunc)
+            {
+                var model = GetModel(managedModelType);
+
+                if (poolFunc is null)
+                    throw new ArgumentNullException(nameof(poolFunc));
+
+                var pool = poolFunc();
+                var type = pool.Policy.BindingType;
+
+                if (model.ContainsDefaultTyped(type))
+                    throw new ArgumentException("The specified type of object pool is exist.");
+
+                UpdateObjectPools(model, type, DefaultName, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="name"></param>
+            /// <param name="policy"></param>
+            /// <returns></returns>
+            public static IObjectPool Create(Type managedModelType, string name, IPolicy policy)
+            {
+                if (policy is null)
+                    throw new ArgumentNullException(nameof(policy));
+
+                var model = GetModel(managedModelType);
+
+                if (model.Contains(policy.BindingType, name))
+                    throw new ArgumentException("The specified type and name of object pool is exist.");
+
+                var type = policy.BindingType;
+                var pool = new ObjectPool(policy);
+
+                UpdateObjectPools(model, type, name, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="name"></param>
+            /// <param name="pool"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="ArgumentException"></exception>
+            public static IObjectPool Create(Type managedModelType, string name, IObjectPool pool)
+            {
+                var model = GetModel(managedModelType);
+
+                if (pool is null)
+                    throw new ArgumentNullException(nameof(pool));
+
+                var type = pool.Policy.BindingType;
+
+                if (model.Contains(type, name))
+                    throw new ArgumentException("The specified type and name of object pool is exist.");
+
+                UpdateObjectPools(model, type, name, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// Create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="name"></param>
+            /// <param name="poolFunc"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="ArgumentException"></exception>
+            public static IObjectPool Create(Type managedModelType, string name, Func<IObjectPool> poolFunc)
+            {
+                var model = GetModel(managedModelType);
+
+                if (poolFunc is null)
+                    throw new ArgumentNullException(nameof(poolFunc));
+
+                var pool = poolFunc();
+                var type = pool.Policy.BindingType;
+
+                if (model.Contains(type, name))
+                    throw new ArgumentException("The specified type and name of object pool is exist.");
 
                 UpdateObjectPools(model, type, name, pool);
 
@@ -448,6 +746,124 @@ namespace Cosmos.Disposables.ObjectPools
                 return pool;
             }
 
+            /// <summary>
+            /// To get or create a specified type of object pool.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="poolSize"></param>
+            /// <param name="createObjectFunc"></param>
+            /// <param name="getObjectHandler"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+            {
+                var model = GetModel(managedModelType);
+                return model.ContainsDefaultTyped(type)
+                    ? model.GetDefaultTyped(type)
+                    : Create(managedModelType, type, poolSize, createObjectFunc, getObjectHandler);
+            }
+
+            /// <summary>
+            /// To get or create a specified type of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="type"></param>
+            /// <param name="policy"></param>
+            /// <returns></returns>
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, IPolicy policy)
+            {
+                var model = GetModel(managedModelType);
+                return model.ContainsDefaultTyped(type)
+                    ? model.GetDefaultTyped(type)
+                    : Create(managedModelType, policy);
+            }
+
+            /// <summary>
+            /// To get or create a specified type of object pool.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="insteadOfFactory"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, Func<IObjectPool> insteadOfFactory)
+            {
+                var model = GetModel(managedModelType);
+
+                if (insteadOfFactory is null)
+                    throw new ArgumentNullException(nameof(insteadOfFactory));
+
+                if (model.ContainsDefaultTyped(type))
+                    return model.GetDefaultTyped(type);
+
+                var pool = insteadOfFactory();
+
+                UpdateObjectPools(model, type, DefaultName, pool);
+
+                return pool;
+            }
+
+            /// <summary>
+            /// To get or create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="name"></param>
+            /// <param name="poolSize"></param>
+            /// <param name="createObjectFunc"></param>
+            /// <param name="getObjectHandler"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc,
+                Action<ObjectOut> getObjectHandler = null)
+            {
+                var model = GetModel(managedModelType);
+                return model.Contains(type, name)
+                    ? model.Get(type, name)
+                    : Create(managedModelType, type, name, poolSize, createObjectFunc, getObjectHandler);
+            }
+
+            /// <summary>
+            /// To get or create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="managedModelType"></param>
+            /// <param name="type"></param>
+            /// <param name="name"></param>
+            /// <param name="policy"></param>
+            /// <returns></returns>
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, string name, IPolicy policy)
+            {
+                var model = GetModel(managedModelType);
+                return model.Contains(type, name)
+                    ? model.Get(type, name)
+                    : Create(managedModelType, name, policy);
+            }
+
+            /// <summary>
+            /// To get or create a specified type and name of object pool.
+            /// </summary>
+            /// <param name="type"></param>
+            /// <param name="name"></param>
+            /// <param name="insteadOfFactory"></param>
+            /// <param name="managedModelType"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, string name, Func<IObjectPool> insteadOfFactory)
+            {
+                var model = GetModel(managedModelType);
+
+                if (insteadOfFactory is null)
+                    throw new ArgumentNullException(nameof(insteadOfFactory));
+
+                if (model.Contains(type, name))
+                    return model.Get(type, name);
+
+                var pool = insteadOfFactory();
+
+                UpdateObjectPools(model, type, name, pool);
+
+                return pool;
+            }
+
             #endregion
 
             #region Contains
@@ -557,6 +973,12 @@ namespace Cosmos.Disposables.ObjectPools
             private static void UpdateObjectPools(IObjectPoolManagedModel model, Type type, string name, IDisposable pool)
             {
                 model.AddOrUpdate(type, name, pool);
+            }
+
+            private static bool IsValidManagedModel(Type managedModelType)
+            {
+                return managedModelType != null
+                    && managedModelType.GetInterfaces().Any(i => i == typeof(IObjectPoolManagedModel));
             }
 
             #endregion

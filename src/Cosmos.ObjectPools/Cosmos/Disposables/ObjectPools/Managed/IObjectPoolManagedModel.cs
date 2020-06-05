@@ -18,6 +18,16 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         IObjectPool<T> GetDefaultTyped<T>();
 
         /// <summary>
+        /// To get the specified type of object pool.<br />
+        /// 获取指定类型的对象池。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"> Unknown type.</exception>
+        /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
+        IObjectPool GetDefaultTyped(Type type);
+
+        /// <summary>
         /// To get the specified type and name of object pool.<br />
         /// 获取指定类型和名称的对象池。
         /// </summary>
@@ -27,6 +37,17 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
         IObjectPool<T> Get<T>(string name);
+
+        /// <summary>
+        /// To get the specified type and name of object pool.<br />
+        /// 获取指定类型和名称的对象池。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
+        /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
+        IObjectPool Get(Type type, string name);
 
         /// <summary>
         /// Add or update

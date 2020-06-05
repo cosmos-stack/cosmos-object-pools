@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Threading;
 
+// ReSharper disable once CheckNamespace
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
@@ -9,7 +10,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// 可回收资源对象
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Object<T> : IDisposable
+    public class Object<T> : ObjectOut, IObject<T>
     {
         /// <summary>
         /// Use the specified object pool for initialization.<br />
@@ -35,61 +36,10 @@ namespace Cosmos.Disposables.ObjectPools
         /// Owning object pool<br />
         /// 所属对象池
         /// </summary>
-        public IObjectPool<T> Pool { get; internal set; }
+        public new IObjectPool<T> Pool { get; internal set; }
 
-        /// <summary>
-        /// Unique identifier in the object pool.<br />
-        /// 在对象池中的唯一标识
-        /// </summary>
-        public int Id { get; internal set; }
-
-        /// <summary>
-        /// Resource object.<br />
-        /// 资源对象
-        /// </summary>
-        public T Value { get; internal set; }
-
-        /// <summary>
-        /// Total times acquired
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        internal long _getTimes;
-
-        /// <summary>
-        /// Total times acquired<br />
-        /// 被获取的总次数
-        /// </summary>
-        public long GetTimes => _getTimes;
-
-        /// <summary>
-        /// Time of last acquisition.<br />
-        /// 最后一次被获取的时间
-        /// </summary>
-        public DateTime LastGetTime { get; internal set; }
-
-        /// <summary>
-        /// The time when it was last returned.<br />
-        /// 最后归还时的时间
-        /// </summary>
-        public DateTime LastReturnTime { get; internal set; }
-
-        /// <summary>
-        /// Created time<br />
-        /// 创建时间
-        /// </summary>
-        public DateTime CreateTime { get; internal set; } = DateTime.Now;
-
-        /// <summary>
-        /// Thread ID at last acquisition.<br />
-        /// 最后获取时的线程 Id
-        /// </summary>
-        public int LastGetThreadId { get; internal set; }
-
-        /// <summary>
-        /// The thread ID at the time of the last return.<br />
-        /// 最后归还时的线程 Id
-        /// </summary>
-        public int LastReturnThreadId { get; internal set; }
+        /// <inheritdoc />
+        public new T Value { get; internal set; }
 
         /// <inheritdoc />
         public override string ToString()
@@ -103,11 +53,8 @@ namespace Cosmos.Disposables.ObjectPools
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Reset Value<br />
-        /// 重置 Value 值
-        /// </summary>
-        public void ResetValue()
+        /// <inheritdoc />
+        public override void ResetValue()
         {
             if (Value != null)
             {
@@ -145,14 +92,8 @@ namespace Cosmos.Disposables.ObjectPools
             LastReturnTime = DateTime.Now;
         }
 
-        /// <summary>
-        /// Is returned
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        internal bool _isReturned = false;
-
         /// <inheritdoc />
-        public void Dispose()
+        public override void Dispose()
         {
             Pool?.Return(this);
         }

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cosmos.Disposables.ObjectPools.Core;
 
+// ReSharper disable once CheckNamespace
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
@@ -13,10 +14,10 @@ namespace Cosmos.Disposables.ObjectPools
     /// 对象池
     /// </summary>
     /// <typeparam name="T">对象类型</typeparam>
-    public class ObjectPool<T> : IObjectPool<T>
+    public class ObjectPool<T> : ObjectPool, IObjectPool<T>
     {
         /// <inheritdoc />
-        public IPolicy<T> Policy { get; protected set; }
+        public new IPolicy<T> Policy { get; protected set; }
 
         private readonly List<Object<T>> _allObjects = new List<Object<T>>();
         private readonly object _allObjectsLockObj = new object();
@@ -68,20 +69,11 @@ namespace Cosmos.Disposables.ObjectPools
 
         #region Available and unavailable
 
-        /// <inheritdoc />
-        public bool IsAvailable => UnavailableException is null;
-
-        /// <inheritdoc />
-        public Exception UnavailableException { get; private set; }
-
-        /// <inheritdoc />
-        public DateTime? UnavailableTime { get; private set; }
-
         private readonly object _unavailableLockObj = new object();
         private bool _running = true;
 
         /// <inheritdoc />
-        public bool SetUnavailable(Exception exception)
+        public override bool SetUnavailable(Exception exception)
         {
             var hasSet = false;
 
@@ -193,7 +185,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        protected bool LiveCheckAvailable()
+        protected new bool LiveCheckAvailable()
         {
             try
             {
@@ -226,7 +218,7 @@ namespace Cosmos.Disposables.ObjectPools
         #region Statistics
 
         /// <inheritdoc />
-        public string Statistics
+        public override string Statistics
         {
             get
             {
@@ -239,7 +231,7 @@ namespace Cosmos.Disposables.ObjectPools
         }
 
         /// <inheritdoc />
-        public string StatisticsFully
+        public override string StatisticsFully
         {
             get
             {
@@ -316,7 +308,7 @@ namespace Cosmos.Disposables.ObjectPools
         }
 
         /// <inheritdoc />
-        public Object<T> Get(TimeSpan? timeout = null)
+        public new Object<T> Get(TimeSpan? timeout = null)
         {
             // Get resources
             var obj = GetOrCreateFreeObject(true);
@@ -380,7 +372,7 @@ namespace Cosmos.Disposables.ObjectPools
         }
 
         /// <inheritdoc />
-        public async Task<Object<T>> GetAsync()
+        public new async Task<Object<T>> GetAsync()
         {
             var obj = GetOrCreateFreeObject(true);
 
@@ -530,7 +522,7 @@ namespace Cosmos.Disposables.ObjectPools
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public override void Dispose()
         {
             _running = false;
 

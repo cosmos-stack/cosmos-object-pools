@@ -30,8 +30,21 @@ namespace Cosmos.Disposables.ObjectPools.Managed
             if (_defaultTypedObjectPools.TryGetValue(typeof(T), out var mid))
                 if (mid is IObjectPool<T> pool)
                     return pool;
+                else if (mid is IObjectPool)
+                    throw new ArgumentException("Use the non-generic version of 'GetDefaultTyped' method.");
                 else
                     throw new InvalidOperationException($"Unknown type: {typeof(T)}");
+            throw new ArgumentException("Unable to get the specified type of object pool.");
+        }
+
+        /// <inheritdoc />
+        public IObjectPool GetDefaultTyped(Type type)
+        {
+            if (_defaultTypedObjectPools.TryGetValue(type, out var mid))
+                if (mid is IObjectPool pool)
+                    return pool;
+                else
+                    throw new InvalidOperationException($"Unknown type: {type}");
             throw new ArgumentException("Unable to get the specified type of object pool.");
         }
 
@@ -41,8 +54,21 @@ namespace Cosmos.Disposables.ObjectPools.Managed
             if (_namedTypedObjectPools.TryGetValue((typeof(T), name), out var mid))
                 if (mid is IObjectPool<T> pool)
                     return pool;
+                else if (mid is IObjectPool)
+                    throw new ArgumentException("Use the non-generic version of 'GetDefaultTyped' method.");
                 else
                     throw new InvalidOperationException($"Unknown type ('{typeof(T)}') or name ('{name}').");
+            throw new ArgumentException("Unable to get the specified type and name of object pool.");
+        }
+
+        /// <inheritdoc />
+        public IObjectPool Get(Type type, string name)
+        {
+            if (_namedTypedObjectPools.TryGetValue((type, name), out var mid))
+                if (mid is IObjectPool pool)
+                    return pool;
+                else
+                    throw new InvalidOperationException($"Unknown type ('{type}') or name ('{name}').");
             throw new ArgumentException("Unable to get the specified type and name of object pool.");
         }
 
