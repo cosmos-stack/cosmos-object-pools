@@ -7,7 +7,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// Interface for Object{T}
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IObject<out T> : IObjectCore
+    public interface IObject<out T> : IObjectOut
     {
         /// <summary>
         /// Resource object.<br />

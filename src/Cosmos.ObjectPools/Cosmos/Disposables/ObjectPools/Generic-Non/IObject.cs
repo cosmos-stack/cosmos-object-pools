@@ -6,7 +6,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// <summary>
     /// Interface for non-generic Object
     /// </summary>
-    public interface IObject : IObjectCore
+    public interface IObject : IObjectOut
     {
         /// <summary>
         /// Resource object.<br />

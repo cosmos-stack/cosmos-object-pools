@@ -8,13 +8,8 @@ namespace Cosmos.Disposables.ObjectPools
     /// <summary>
     /// Interface for non-generic ObjectPool
     /// </summary>
-    public interface IObjectPool : IObjectPoolCore
+    public interface IObjectPool : IObjectPoolCore<IPolicy>
     {
-        /// <summary>
-        /// Gets policy
-        /// </summary>
-        IPolicy Policy { get; }
-
         /// <summary>
         /// Access to resources.<br />
         /// 获取资源

@@ -1,46 +1,22 @@
 using System;
 using System.Text;
-using System.Threading;
+using Cosmos.Disposables.ObjectPools.Core;
 
 // ReSharper disable once CheckNamespace
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
-    /// Recyclable resource objects.<br />
-    /// 可回收资源对象
+    /// Non-generic recyclable resource objects.<br />
+    /// 非泛型可回收资源对象
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Object<T> : ObjectOut, IObject<T>
+    public class ObjectOut : ObjectOutBase<object>, IObject
     {
-        /// <summary>
-        /// Use the specified object pool for initialization.<br />
-        /// 使用指定对象池进行初始化
-        /// </summary>
-        /// <param name="pool"></param>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static Object<T> InitWith(IObjectPool<T> pool, int id, T value)
-        {
-            return new Object<T>
-            {
-                Pool = pool,
-                Id = id,
-                Value = value,
-                LastGetThreadId = Thread.CurrentThread.ManagedThreadId,
-                LastGetTime = DateTime.Now
-            };
-        }
-
         /// <summary>
         /// Owning object pool<br />
         /// 所属对象池
         /// </summary>
-        public new IObjectPool<T> Pool { get; internal set; }
-
-        /// <inheritdoc />
-        public new T Value { get; internal set; }
-
+        public IObjectPool Pool { get; internal set; }
+        
         /// <inheritdoc />
         public override string ToString()
         {
@@ -77,7 +53,7 @@ namespace Cosmos.Disposables.ObjectPools
                 }
             }
 
-            T value = default;
+            object value = default;
 
             try
             {

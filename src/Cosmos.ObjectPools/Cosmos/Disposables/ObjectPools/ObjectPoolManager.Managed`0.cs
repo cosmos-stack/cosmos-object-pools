@@ -244,6 +244,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// To get or create a specified type of object pool.
         /// </summary>
         /// <param name="opt"></param>
+        /// <param name="type"></param>
         /// <param name="insteadOfFactory"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>

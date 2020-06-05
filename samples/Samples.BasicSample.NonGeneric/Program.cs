@@ -24,10 +24,9 @@ namespace Samples.BasicSample.NonGeneric
 
             //var pool = ObjectPoolManager.Get<SampleModel>();
 
-            var pool = ObjectPoolManager.ManagedModels.Get(managedModelType, type, "OK");
-            //var pool = ObjectPoolManager.ManagedModels.Get<SampleModel, CustomModel>("OK");
+            //var pool = ObjectPoolManager.ManagedModels.Get(managedModelType, type, "OK");
 
-            //var pool = ObjectPoolManager.Managed<CustomModel>.Get<SampleModel>("OK");
+            var pool = ObjectPoolManager.NonGeneric.Managed(managedModelType).Get(type, "OK");
 
             for (var i = 0; i < 100; i++)
             {

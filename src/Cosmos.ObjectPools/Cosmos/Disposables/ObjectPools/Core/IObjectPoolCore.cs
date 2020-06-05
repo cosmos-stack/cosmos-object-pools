@@ -5,8 +5,13 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <summary>
     /// Interface for ObjectPool
     /// </summary>
-    public interface IObjectPoolCore : IDisposable
+    public interface IObjectPoolCore<out TPolicy> : IDisposable
     {
+        /// <summary>
+        /// Gets policy
+        /// </summary>
+        TPolicy Policy { get; }
+        
         /// <summary>
         /// Is available<br />
         /// 是否可用

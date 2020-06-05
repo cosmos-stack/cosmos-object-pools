@@ -213,7 +213,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectPool<T> Create<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+            public static IObjectPool<T> Create<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -240,7 +240,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectPool<T> Create<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+            public static IObjectPool<T> Create<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -636,7 +636,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -695,7 +695,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();

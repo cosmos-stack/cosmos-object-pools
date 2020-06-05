@@ -5,7 +5,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <summary>
     /// Interface for Object
     /// </summary>
-    public interface IObjectCore : IDisposable
+    public interface IObjectOut : IDisposable
     {
         /// <summary>
         /// Unique identifier in the object pool.<br />

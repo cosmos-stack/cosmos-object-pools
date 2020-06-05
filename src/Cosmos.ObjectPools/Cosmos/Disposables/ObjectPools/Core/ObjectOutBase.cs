@@ -5,10 +5,15 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <summary>
     /// Base recyclable object
     /// </summary>
-    public abstract class RecyclableObjectBase : IObjectCore
+    public abstract class ObjectOutBase<T> : IObjectOut
     {
         /// <inheritdoc />
         public int Id { get; internal set; }
+
+        /// <summary>
+        /// Value
+        /// </summary>
+        public T Value { get; internal set; }
 
         /// <summary>
         /// Total times acquired
@@ -36,7 +41,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
         /// <inheritdoc />
         public abstract void ResetValue();
-        
+
         /// <summary>
         /// Is returned
         /// </summary>

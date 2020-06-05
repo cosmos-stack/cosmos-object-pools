@@ -47,6 +47,31 @@ namespace Cosmos.Disposables.ObjectPools
             return _defaultManagedModel.Get<T>(name);
         }
 
+        /// <summary>
+        /// To get the specified type of object pool.<br />
+        /// 获取指定类型的对象池。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static IObjectPool Get(Type type)
+        {
+            return _defaultManagedModel.GetDefaultTyped(type);
+        }
+
+        /// <summary>
+        /// To get the specified type and name of object pool.<br />
+        /// 获取指定类型和名称的对象池。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
+        /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
+        public static IObjectPool Get(Type type, string name)
+        {
+            return _defaultManagedModel.Get(type, name);
+        }
+
         #endregion
 
         #region Create
@@ -59,7 +84,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+        public static IObjectPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
         {
             if (Contains<T>())
                 throw new ArgumentException("The specified type of object pool is exist.");
@@ -82,7 +107,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+        public static IObjectPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = DefaultName;
@@ -106,6 +131,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         public static IObjectPool<T> Create<T>(IPolicy<T> policy)
         {
+            if (policy is null)
+                throw new ArgumentNullException(nameof(policy));
+
             if (Contains<T>())
                 throw new ArgumentException("The specified type of object pool is exist.");
 
@@ -174,6 +202,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <exception cref="ArgumentException"></exception>
         public static IObjectPool<T> Create<T>(string name, IPolicy<T> policy)
         {
+            if (policy is null)
+                throw new ArgumentNullException(nameof(policy));
+
             if (string.IsNullOrWhiteSpace(name))
                 name = DefaultName;
 
@@ -237,6 +268,187 @@ namespace Cosmos.Disposables.ObjectPools
             return pool;
         }
 
+        /// <summary>
+        /// Create a specified type of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="poolSize"></param>
+        /// <param name="createObjectFunc"></param>
+        /// <param name="getObjectHandler"></param>
+        /// <returns></returns>
+        public static IObjectPool Create(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        {
+            if (Contains(type))
+                throw new ArgumentException("The specified type of object pool is exist.");
+
+            var pool = new ObjectPool(type, poolSize, createObjectFunc, getObjectHandler);
+
+            UpdateObjectPools(type, DefaultName, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="poolSize"></param>
+        /// <param name="createObjectFunc"></param>
+        /// <param name="getObjectHandler"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static IObjectPool Create(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                name = DefaultName;
+
+            if (Contains(type, name))
+                throw new ArgumentException("The specified type or name of object pool is exist.");
+
+            var pool = new ObjectPool(type, poolSize, createObjectFunc, getObjectHandler);
+
+            UpdateObjectPools(type, name, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type of object pool.
+        /// </summary>
+        /// <param name="policy"></param>
+        /// <returns></returns>
+        public static IObjectPool Create(IPolicy policy)
+        {
+            if (policy is null)
+                throw new ArgumentNullException(nameof(policy));
+
+            if (Contains(policy.BindingType))
+                throw new ArgumentException("The specified type of object pool is exist.");
+
+            var pool = new ObjectPool(policy);
+
+            UpdateObjectPools(policy.BindingType, DefaultName, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type of object pool.
+        /// </summary>
+        /// <param name="pool"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static IObjectPool Create(IObjectPool pool)
+        {
+            if (pool is null)
+                throw new ArgumentNullException(nameof(pool));
+
+            if (Contains(pool.Policy.BindingType))
+                throw new ArgumentException("The specified type of object pool is exist.");
+
+            UpdateObjectPools(pool.Policy.BindingType, DefaultName, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="poolFunc"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static IObjectPool Create(Type type, Func<IObjectPool> poolFunc)
+        {
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
+
+            if (poolFunc is null)
+                throw new ArgumentNullException(nameof(poolFunc));
+
+            if (Contains(type))
+                throw new ArgumentException("The specified type of object pool is exist.");
+
+            var pool = poolFunc();
+
+            UpdateObjectPools(type, DefaultName, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="policy"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static IObjectPool Create(string name, IPolicy policy)
+        {
+            if (policy is null)
+                throw new ArgumentNullException(nameof(policy));
+
+            if (string.IsNullOrWhiteSpace(name))
+                name = DefaultName;
+
+            if (Contains(policy.BindingType, name))
+                throw new ArgumentException("The specified type or name of object pool is exist.");
+
+            var pool = new ObjectPool(policy);
+
+            UpdateObjectPools(policy.BindingType, name, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="pool"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static IObjectPool Create(string name, IObjectPool pool)
+        {
+            if (pool is null)
+                throw new ArgumentNullException(nameof(pool));
+
+            if (Contains(pool.Policy.BindingType, name))
+                throw new ArgumentException("The specified type or name of object pool is exist.");
+
+            UpdateObjectPools(pool.Policy.BindingType, name, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="poolFunc"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static IObjectPool Create(Type type, string name, Func<IObjectPool> poolFunc)
+        {
+            if (poolFunc is null)
+                throw new ArgumentNullException(nameof(poolFunc));
+
+            if (Contains(type, name))
+                throw new ArgumentException("The specified type or name of object pool is exist.");
+
+            var pool = poolFunc();
+
+            UpdateObjectPools(type, name, pool);
+
+            return pool;
+        }
+
         #endregion
 
         #region Get or create
@@ -249,11 +461,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+        public static IObjectPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
         {
-            if (Contains<T>())
-                return Get<T>();
-            return Create(poolSize, createObjectFunc, getObjectHandler);
+            return Contains<T>() ? Get<T>() : Create(poolSize, createObjectFunc, getObjectHandler);
         }
 
         /// <summary>
@@ -264,9 +474,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         public static IObjectPool<T> GetOrCreate<T>(IPolicy<T> policy)
         {
-            if (Contains<T>())
-                return Get<T>();
-            return Create(policy);
+            return Contains<T>() ? Get<T>() : Create(policy);
         }
 
         /// <summary>
@@ -300,11 +508,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<Object<T>> getObjectHandler = null)
+        public static IObjectPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
         {
-            if (Contains<T>(name))
-                return Get<T>(name);
-            return Create(name, poolSize, createObjectFunc, getObjectHandler);
+            return Contains<T>(name) ? Get<T>(name) : Create(name, poolSize, createObjectFunc, getObjectHandler);
         }
 
         /// <summary>
@@ -316,9 +522,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         public static IObjectPool<T> GetOrCreate<T>(string name, IPolicy<T> policy)
         {
-            if (Contains<T>(name))
-                return Get<T>(name);
-            return Create(name, policy);
+            return Contains<T>(name) ? Get<T>(name) : Create(name, policy);
         }
 
         /// <summary>
@@ -340,6 +544,103 @@ namespace Cosmos.Disposables.ObjectPools
             var pool = insteadOfFactory();
 
             UpdateObjectPools(typeof(T), name, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// To get or create a specified type of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="poolSize"></param>
+        /// <param name="createObjectFunc"></param>
+        /// <param name="getObjectHandler"></param>
+        /// <returns></returns>
+        public static IObjectPool GetOrCreate(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        {
+            return Contains(type) ? Get(type) : Create(type, poolSize, createObjectFunc, getObjectHandler);
+        }
+
+        /// <summary>
+        /// To get or create a specified type of object pool.
+        /// </summary>
+        /// <param name="policy"></param>
+        /// <returns></returns>
+        public static IObjectPool GetOrCreate(IPolicy policy)
+        {
+            if (policy is null)
+                throw new ArgumentNullException(nameof(policy));
+            return Contains(policy.BindingType) ? Get(policy.BindingType) : Create(policy);
+        }
+
+        /// <summary>
+        /// To get or create a specified type of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="insteadOfFactory"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IObjectPool GetOrCreate(Type type, Func<IObjectPool> insteadOfFactory)
+        {
+            if (insteadOfFactory is null)
+                throw new ArgumentNullException(nameof(insteadOfFactory));
+
+            if (Contains(type))
+                return Get(type);
+
+            var pool = insteadOfFactory();
+
+            UpdateObjectPools(type, DefaultName, pool);
+
+            return pool;
+        }
+
+        /// <summary>
+        /// To get or create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="poolSize"></param>
+        /// <param name="createObjectFunc"></param>
+        /// <param name="getObjectHandler"></param>
+        /// <returns></returns>
+        public static IObjectPool GetOrCreate(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        {
+            return Contains(type, name) ? Get(type, name) : Create(type, name, poolSize, createObjectFunc, getObjectHandler);
+        }
+
+        /// <summary>
+        /// To get or create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="policy"></param>
+        /// <returns></returns>
+        public static IObjectPool GetOrCreate(string name, IPolicy policy)
+        {
+            if (policy is null)
+                throw new ArgumentNullException(nameof(policy));
+            return Contains(policy.BindingType, name) ? Get(policy.BindingType, name) : Create(name, policy);
+        }
+
+        /// <summary>
+        /// To get or create a specified type and name of object pool.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="insteadOfFactory"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IObjectPool GetOrCreate(Type type, string name, Func<IObjectPool> insteadOfFactory)
+        {
+            if (insteadOfFactory is null)
+                throw new ArgumentNullException(nameof(insteadOfFactory));
+
+            if (Contains(type, name))
+                return Get(type, name);
+
+            var pool = insteadOfFactory();
+
+            UpdateObjectPools(type, name, pool);
 
             return pool;
         }
