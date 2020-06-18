@@ -14,6 +14,12 @@ namespace Cosmos.Disposables.ObjectPools.Core
         int Id { get; }
 
         /// <summary>
+        /// Get a copy of DynamicObjectOut instance.
+        /// </summary>
+        /// <returns></returns>
+        DynamicObjectOut GetDynamicObjectOut();
+
+        /// <summary>
         /// Total times acquired<br />
         /// 被获取的总次数
         /// </summary>

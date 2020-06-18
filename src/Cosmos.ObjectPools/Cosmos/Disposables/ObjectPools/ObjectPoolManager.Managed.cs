@@ -527,6 +527,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
+            // ReSharper disable once MemberHidesStaticFromOuterClass
             public static IObjectPool Create(Type managedModelType, Func<IObjectPool> poolFunc)
             {
                 var model = GetModel(managedModelType);
@@ -605,6 +606,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
+            // ReSharper disable once MemberHidesStaticFromOuterClass
             public static IObjectPool Create(Type managedModelType, string name, Func<IObjectPool> poolFunc)
             {
                 var model = GetModel(managedModelType);

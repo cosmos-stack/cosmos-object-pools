@@ -1,18 +1,23 @@
 using System;
-using System.Text;
 using System.Threading;
 using Cosmos.Disposables.ObjectPools.Core;
 
-// ReSharper disable once CheckNamespace
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
-    /// Recyclable resource objects.<br />
-    /// 可回收资源对象
+    /// Non-generic recyclable resource objects.<br />
+    /// 非泛型可回收资源对象
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ObjectOut<T> : ObjectOutBase<T>, IObject<T>
+    public class ObjectOut : ObjectOutBase<object>, IObject
     {
+        /// <inheritdoc />
+        public ObjectOut() { }
+
+        internal ObjectOut(string internalId, DynamicObjectOut dynamicObjectOut)
+            : base(internalId, dynamicObjectOut) { }
+
+        #region InitWith
+
         /// <summary>
         /// Use the specified object pool for initialization.<br />
         /// 使用指定对象池进行初始化
@@ -21,9 +26,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static ObjectOut<T> InitWith(IObjectPool<T> pool, int id, T value)
+        public static ObjectOut InitWith(IObjectPool pool, int id, object value)
         {
-            return new ObjectOut<T>
+            return new ObjectOut
             {
                 Pool = pool,
                 Id = id,
@@ -34,22 +39,35 @@ namespace Cosmos.Disposables.ObjectPools
         }
 
         /// <summary>
+        /// Use the specified object pool for initialization.<br />
+        /// 使用指定对象池进行初始化
+        /// </summary>
+        /// <param name="pool"></param>
+        /// <param name="id"></param>
+        /// <param name="dynamicObjectOut"></param>
+        /// <returns></returns>
+        public static ObjectOut InitWith(IObjectPool pool, int id, DynamicObjectOut dynamicObjectOut)
+        {
+            var ret = new ObjectOut
+            {
+                Pool = pool,
+                Id = id,
+                LastGetThreadId = Thread.CurrentThread.ManagedThreadId,
+                LastGetTime = DateTime.Now
+            };
+
+            ret.SetDynamicObjectOut(dynamicObjectOut);
+
+            return ret;
+        }
+
+        #endregion
+
+        /// <summary>
         /// Owning object pool<br />
         /// 所属对象池
         /// </summary>
-        public IObjectPool<T> Pool { get; internal set; }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.Append($"{Value}, ");
-            sb.Append($"Times: {GetTimes}, ");
-            sb.Append($"ThreadId(R/G): {LastReturnThreadId}/{LastGetThreadId}, ");
-            sb.Append($"Time(R/G): {LastReturnTime:yyyy-MM-dd HH:mm:ss:ms}/{LastGetTime:yyyy-MM-dd HH:mm:ss:ms}");
-
-            return sb.ToString();
-        }
+        public IObjectPool Pool { get; internal set; }
 
         /// <inheritdoc />
         public override void ResetValue()
@@ -75,7 +93,7 @@ namespace Cosmos.Disposables.ObjectPools
                 }
             }
 
-            T value = default;
+            object value = default;
 
             try
             {

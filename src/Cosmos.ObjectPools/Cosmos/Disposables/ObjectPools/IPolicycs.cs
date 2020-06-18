@@ -1,7 +1,6 @@
 using System;
 using Cosmos.Disposables.ObjectPools.Core;
 
-// ReSharper disable once CheckNamespace
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>

@@ -4,7 +4,6 @@ using Cosmos.Asynchronous;
 using Cosmos.Disposables.ObjectPools.Core;
 using Cosmos.Reflection;
 
-// ReSharper disable once CheckNamespace
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>

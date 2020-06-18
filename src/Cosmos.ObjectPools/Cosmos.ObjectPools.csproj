@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Cosmos.Standard" Version="0.1.4.4-alpha2-201001" />
+        <PackageReference Include="Cosmos.Standard" Version="0.1.4.4-alpha2-201012" />
     </ItemGroup>
 
 </Project>
