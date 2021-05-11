@@ -12,7 +12,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// </summary>
     public abstract class ObjectPoolBase<T, TPolicy, TObject> : IObjectPoolCore<TPolicy>
         where TPolicy : IPolicyCore<T, TObject>
-        where TObject : ObjectOutBase<T>, IObjectOut, new()
+        where TObject : ObjectBoxBase<T>, IObjectBox, new()
     {
         /// <summary>
         /// Create a new instance of <see cref="ObjectPoolBase{T, TPolicy, TObject}"/>.<br />
@@ -115,7 +115,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
             {
                 if (UnavailableException != null)
                 {
-                    Displayer.Unavailable($"【{Policy.Name}】恢复检查时间：{DateTime.Now.AddSeconds(interval)}");
+                    ConsoleWriter.Unavailable($"【{Policy.Name}】恢复检查时间：{DateTime.Now.AddSeconds(interval)}");
                 }
 
                 while (UnavailableException != null)
@@ -130,12 +130,12 @@ namespace Cosmos.Disposables.ObjectPools.Core
                     {
                         var conn = GetOrCreateFreeObject(false);
                         if (conn is null)
-                            throw ExceptionNew.CA_UnableToObtainResources(Statistics);
+                            throw ExceptionHelper.CA_UnableToObtainResources(Statistics);
 
                         try
                         {
                             if (Policy.OnCheckAvailable(conn) == false)
-                                throw ExceptionNew.CA_StillUnableToObtainResources();
+                                throw ExceptionHelper.CA_StillUnableToObtainResources();
 
                             break;
                         }
@@ -146,7 +146,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                     }
                     catch (Exception ex)
                     {
-                        Displayer.Unavailable($"【{Policy.Name}】仍然不可用，下一次恢复检查时间：{DateTime.Now.AddSeconds(interval)}，错误：({ex.Message})");
+                        ConsoleWriter.Unavailable($"【{Policy.Name}】仍然不可用，下一次恢复检查时间：{DateTime.Now.AddSeconds(interval)}，错误：({ex.Message})");
                     }
                 }
 
@@ -181,7 +181,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
                 Policy.OnAvailable();
 
-                Displayer.Available($"【{Policy.Name}】已恢复工作");
+                ConsoleWriter.Available($"【{Policy.Name}】已恢复工作");
             }
         }
 
@@ -196,12 +196,12 @@ namespace Cosmos.Disposables.ObjectPools.Core
             {
                 var conn = GetOrCreateFreeObject(false);
                 if (conn is null)
-                    throw ExceptionNew.LCA_UnableToObtainResources(Statistics);
+                    throw ExceptionHelper.LCA_UnableToObtainResources(Statistics);
 
                 try
                 {
                     if (Policy.OnCheckAvailable(conn) == false)
-                        throw ExceptionNew.LCA_StillUnableToObtainResources();
+                        throw ExceptionHelper.LCA_StillUnableToObtainResources();
                 }
                 finally
                 {
@@ -274,11 +274,11 @@ namespace Cosmos.Disposables.ObjectPools.Core
         {
             // Object pool has been released and cannot be accessed.
             if (_running == false)
-                throw ExceptionNew.ObjectPolHasBeenReleased(Policy.Name);
+                throw ExceptionHelper.ObjectPolHasBeenReleased(Policy.Name);
 
             // Status is not available
             if (checkAvailable && UnavailableException != null)
-                throw ExceptionNew.StatusIsNotAvailable(Policy.Name, UnavailableException?.Message);
+                throw ExceptionHelper.StatusIsNotAvailable(Policy.Name, UnavailableException?.Message);
 
             // When no available resources are obtained, or the resources are null
             // and the total number of objects does not exceed the upper limit of the resource pool,
@@ -362,7 +362,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                     Policy.OnGetTimeout();
 
                     if (Policy.IsThrowGetTimeoutException)
-                        throw ExceptionNew.ResourceAcquisitionTimeout(timeout.Value.TotalSeconds);
+                        throw ExceptionHelper.ResourceAcquisitionTimeout(timeout.Value.TotalSeconds);
 
                     return null;
                 }
@@ -398,7 +398,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
             if (obj is null)
             {
                 if (Policy.AsyncGetCapacity > 0 && _getAsyncQueue.Count >= Policy.AsyncGetCapacity - 1)
-                    throw ExceptionNew.NoResourcesAvailableForAsynchronousCalls(Policy.AsyncGetCapacity);
+                    throw ExceptionHelper.NoResourcesAvailableForAsynchronousCalls(Policy.AsyncGetCapacity);
 
                 var tcs = new TaskCompletionSource<TObject>();
 

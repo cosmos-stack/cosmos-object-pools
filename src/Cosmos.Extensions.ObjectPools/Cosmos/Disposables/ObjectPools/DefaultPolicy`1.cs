@@ -10,7 +10,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// Default policy
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DefaultPolicy<T> : PolicyBase<T, ObjectOut<T>>, IPolicy<T>
+    public class DefaultPolicy<T> : PolicyBase<T, ObjectBox<T>>, IPolicy<T>
     {
         /// <inheritdoc />
         public DefaultPolicy()
@@ -26,13 +26,13 @@ namespace Cosmos.Disposables.ObjectPools
         /// <summary>
         /// On get object
         /// </summary>
-        public Action<ObjectOut<T>> OnGetObject;
+        public Action<ObjectBox<T>> OnGetObject;
 
         /// <inheritdoc />
         public override T OnCreate() => CreateObject();
 
         /// <inheritdoc />
-        public override Task OnGetAsync(ObjectOut<T> obj)
+        public override Task OnGetAsync(ObjectBox<T> obj)
         {
             OnGetObject?.Invoke(obj);
             return Tasks.CompletedTask();

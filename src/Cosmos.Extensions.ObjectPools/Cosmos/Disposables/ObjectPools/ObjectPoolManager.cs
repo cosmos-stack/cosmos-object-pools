@@ -84,7 +84,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+        public static IObjectPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
         {
             if (Contains<T>())
                 throw new ArgumentException("The specified type of object pool is exist.");
@@ -107,7 +107,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+        public static IObjectPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = DefaultName;
@@ -276,7 +276,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="createObjectFunc"></param>
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
-        public static IObjectPool Create(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        public static IObjectPool Create(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
         {
             if (Contains(type))
                 throw new ArgumentException("The specified type of object pool is exist.");
@@ -298,7 +298,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectPool Create(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        public static IObjectPool Create(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = DefaultName;
@@ -461,7 +461,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+        public static IObjectPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
         {
             return Contains<T>() ? Get<T>() : Create(poolSize, createObjectFunc, getObjectHandler);
         }
@@ -508,7 +508,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+        public static IObjectPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
         {
             return Contains<T>(name) ? Get<T>(name) : Create(name, poolSize, createObjectFunc, getObjectHandler);
         }
@@ -556,7 +556,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="createObjectFunc"></param>
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
-        public static IObjectPool GetOrCreate(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        public static IObjectPool GetOrCreate(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
         {
             return Contains(type) ? Get(type) : Create(type, poolSize, createObjectFunc, getObjectHandler);
         }
@@ -604,7 +604,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="createObjectFunc"></param>
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
-        public static IObjectPool GetOrCreate(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+        public static IObjectPool GetOrCreate(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
         {
             return Contains(type, name) ? Get(type, name) : Create(type, name, poolSize, createObjectFunc, getObjectHandler);
         }

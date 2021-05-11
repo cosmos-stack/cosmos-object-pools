@@ -9,7 +9,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <typeparam name="TObject"></typeparam>
     /// <typeparam name="T"></typeparam>
     public abstract class PolicyBase<T, TObject> : IPolicyCore<T, TObject>
-        where TObject : ObjectOutBase<T>, IObjectOut
+        where TObject : ObjectBoxBase<T>, IObjectBox
     {
         /// <inheritdoc />
         public string Name { get; set; }

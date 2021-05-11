@@ -8,7 +8,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// 对象池
     /// </summary>
     /// <typeparam name="T">对象类型</typeparam>
-    public class ObjectPool<T> : ObjectPoolBase<T, IPolicy<T>, ObjectOut<T>>, IObjectPool<T>
+    public class ObjectPool<T> : ObjectPoolBase<T, IPolicy<T>, ObjectBox<T>>, IObjectPool<T>
     {
         /// <summary>
         /// Create a new instance of <see cref="ObjectPool{T}"/>.<br />
@@ -17,7 +17,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="poolSize">池大小</param>
         /// <param name="createObject">池内对象的创建委托</param>
         /// <param name="onGetObject">获取池内对象成功后，进行使用前操作</param>
-        public ObjectPool(int poolSize, Func<T> createObject, Action<ObjectOut<T>> onGetObject = null)
+        public ObjectPool(int poolSize, Func<T> createObject, Action<ObjectBox<T>> onGetObject = null)
             : base(new DefaultPolicy<T> {PoolSize = poolSize, CreateObject = createObject, OnGetObject = onGetObject}) { }
 
         /// <summary>
@@ -31,9 +31,9 @@ namespace Cosmos.Disposables.ObjectPools
         public override ObjectPoolMode Mode => ObjectPoolMode.GenericMode;
 
         /// <inheritdoc />
-        protected override Func<int, ObjectOut<T>> RecyclableObjectFactory()
+        protected override Func<int, ObjectBox<T>> RecyclableObjectFactory()
         {
-            return count => new ObjectOut<T> {Pool = this, Id = count + 1};
+            return count => new ObjectBox<T> {Pool = this, Id = count + 1};
         }
     }
 }

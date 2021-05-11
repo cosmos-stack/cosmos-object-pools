@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cosmos.Disposables.ObjectPools.Core;
+using Cosmos.Exceptions;
 
 namespace Cosmos.Disposables.ObjectPools
 {
@@ -9,13 +10,13 @@ namespace Cosmos.Disposables.ObjectPools
     /// 可回收资源对象
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ObjectOut<T> : ObjectOutBase<T>, IObject<T>
+    public class ObjectBox<T> : ObjectBoxBase<T>, IObject<T>
     {
         /// <inheritdoc />
-        public ObjectOut() { }
+        public ObjectBox() { }
 
-        internal ObjectOut(string internalId, DynamicObjectOut dynamicObjectOut)
-            : base(internalId, dynamicObjectOut) { }
+        internal ObjectBox(string internalId, DynamicObjectBox dynamicObjectBox)
+            : base(internalId, dynamicObjectBox) { }
 
         #region InitWith
 
@@ -27,9 +28,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static ObjectOut<T> InitWith(IObjectPool<T> pool, int id, T value)
+        public static ObjectBox<T> InitWith(IObjectPool<T> pool, int id, T value)
         {
-            return new ObjectOut<T>
+            return new()
             {
                 Pool = pool,
                 Id = id,
@@ -45,11 +46,11 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="id"></param>
-        /// <param name="dynamicObjectOut"></param>
+        /// <param name="dynamicObjectBox"></param>
         /// <returns></returns>
-        public static ObjectOut<T> InitWith(IObjectPool<T> pool, int id, DynamicObjectOut dynamicObjectOut)
+        public static ObjectBox<T> InitWith(IObjectPool<T> pool, int id, DynamicObjectBox dynamicObjectBox)
         {
-            var ret = new ObjectOut<T>
+            var ret = new ObjectBox<T>
             {
                 Pool = pool,
                 Id = id,
@@ -57,7 +58,7 @@ namespace Cosmos.Disposables.ObjectPools
                 LastGetTime = DateTime.Now
             };
 
-            ret.SetDynamicObjectOut(dynamicObjectOut);
+            ret.SetDynamicObjectOut(dynamicObjectBox);
 
             return ret;
         }
@@ -73,39 +74,13 @@ namespace Cosmos.Disposables.ObjectPools
         /// <inheritdoc />
         public override void ResetValue()
         {
-            if (Value != null)
+            if (Value is not null)
             {
-                try
-                {
-                    Pool.Policy.OnDestroy(Value);
-                }
-                catch
-                {
-                    // ignored
-                }
-
-                try
-                {
-                    (Value as IDisposable)?.Dispose();
-                }
-                catch
-                {
-                    // ignored
-                }
+                Try.Invoke(() => Pool.Policy.OnDestroy(Value));
+                Try.Invoke(() => (Value as IDisposable)?.Dispose());
             }
 
-            T value = default;
-
-            try
-            {
-                value = Pool.Policy.OnCreate();
-            }
-            catch
-            {
-                // ignored
-            }
-
-            Value = value;
+            Value = Try.Create(Pool.Policy.OnCreate).GetSafeValue(default(T));
             LastReturnTime = DateTime.Now;
         }
 
@@ -116,13 +91,13 @@ namespace Cosmos.Disposables.ObjectPools
         }
 
         // /// <summary>
-        // /// Implicit convert ObjectOut`1 to ObjectOut
+        // /// Implicit convert ObjectBox`1 to ObjectOut
         // /// </summary>
         // /// <param name="that"></param>
         // /// <returns></returns>
-        // public static implicit operator ObjectOut(ObjectOut<T> that)
+        // public static implicit operator ObjectBox(ObjectBox<T> that)
         // {
-        //     var ret = new ObjectOut(that.InternalIdentity, that.GetDynamicObjectOut())
+        //     var ret = new ObjectBox(that.InternalIdentity, that.GetDynamicObjectOut())
         //     {
         //         Id = that.Id,
         //         Pool = that.Pool,
@@ -139,13 +114,13 @@ namespace Cosmos.Disposables.ObjectPools
         // }
         //
         // /// <summary>
-        // /// Implicit convert ObjectOut to ObjectOut`1
+        // /// Implicit convert ObjectBox to ObjectOut`1
         // /// </summary>
         // /// <param name="that"></param>
         // /// <returns></returns>
-        // public static implicit operator ObjectOut<T>(ObjectOut that)
+        // public static implicit operator ObjectBox<T>(ObjectBox that)
         // {
-        //     var ret = new ObjectOut<T>(that.InternalIdentity, that.GetDynamicObjectOut())
+        //     var ret = new ObjectBox<T>(that.InternalIdentity, that.GetDynamicObjectOut())
         //     {
         //         Id = that.Id,
         //         Pool = that.Pool,

@@ -12,7 +12,7 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         private readonly ConcurrentDictionary<Type, IDisposable> _defaultTypedObjectPools;
         private readonly ConcurrentDictionary<(Type, string), IDisposable> _namedTypedObjectPools;
         private readonly ConcurrentDictionary<string, List<IDisposable>> _namedObjectPools;
-        private readonly object _updateLockObj = new object();
+        private readonly object _updateLockObj = new();
 
         /// <summary>
         /// Create a new instance of <see cref="ObjectPoolManagedModel"/>.

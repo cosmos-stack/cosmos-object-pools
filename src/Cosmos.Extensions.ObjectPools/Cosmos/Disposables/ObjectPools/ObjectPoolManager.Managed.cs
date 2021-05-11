@@ -96,7 +96,7 @@ namespace Cosmos.Disposables.ObjectPools
                 if (!IsValidManagedModel(managedModelType))
                     throw new ArgumentException("This type is not a valid IObjectPoolManagedModel instance.");
 
-                var instance = Types.CreateInstance(managedModelType) as IObjectPoolManagedModel;
+                var instance = TypeVisit.CreateInstance(managedModelType) as IObjectPoolManagedModel;
 
                 return _managedModels.TryAdd(managedModelType, instance);
             }
@@ -213,7 +213,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectPool<T> Create<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> Create<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -240,7 +240,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectPool<T> Create<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> Create<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -429,7 +429,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectPool Create(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+            public static IObjectPool Create(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
             {
                 var model = GetModel(managedModelType);
 
@@ -453,7 +453,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectPool Create(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+            public static IObjectPool Create(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
             {
                 var model = GetModel(managedModelType);
 
@@ -638,7 +638,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -697,7 +697,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> GetOrCreate<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = GetModel<TManagedModel>();
@@ -757,7 +757,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectPool GetOrCreate(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectOut> getObjectHandler = null)
+            public static IObjectPool GetOrCreate(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
             {
                 var model = GetModel(managedModelType);
                 return model.ContainsDefaultTyped(type)
@@ -816,7 +816,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="managedModelType"></param>
             /// <returns></returns>
             public static IObjectPool GetOrCreate(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc,
-                Action<ObjectOut> getObjectHandler = null)
+                Action<ObjectBox> getObjectHandler = null)
             {
                 var model = GetModel(managedModelType);
                 return model.Contains(type, name)

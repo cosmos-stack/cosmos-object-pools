@@ -7,7 +7,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// Interface for recyclable object policy
     /// </summary>
     public interface IPolicyCore<T, in TObject>
-        where TObject : ObjectOutBase<T>, IObjectOut
+        where TObject : ObjectBoxBase<T>, IObjectBox
     {
         /// <summary>
         /// Gets or sets name of policy<br />

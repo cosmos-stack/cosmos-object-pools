@@ -8,13 +8,13 @@ namespace Cosmos.Disposables.ObjectPools
     /// Non-generic recyclable resource objects.<br />
     /// 非泛型可回收资源对象
     /// </summary>
-    public class ObjectOut : ObjectOutBase<object>, IObject
+    public class ObjectBox : ObjectBoxBase<object>, IObject
     {
         /// <inheritdoc />
-        public ObjectOut() { }
+        public ObjectBox() { }
 
-        internal ObjectOut(string internalId, DynamicObjectOut dynamicObjectOut)
-            : base(internalId, dynamicObjectOut) { }
+        internal ObjectBox(string internalId, DynamicObjectBox dynamicObjectBox)
+            : base(internalId, dynamicObjectBox) { }
 
         #region InitWith
 
@@ -26,9 +26,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static ObjectOut InitWith(IObjectPool pool, int id, object value)
+        public static ObjectBox InitWith(IObjectPool pool, int id, object value)
         {
-            return new ObjectOut
+            return new ObjectBox
             {
                 Pool = pool,
                 Id = id,
@@ -44,11 +44,11 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="id"></param>
-        /// <param name="dynamicObjectOut"></param>
+        /// <param name="dynamicObjectBox"></param>
         /// <returns></returns>
-        public static ObjectOut InitWith(IObjectPool pool, int id, DynamicObjectOut dynamicObjectOut)
+        public static ObjectBox InitWith(IObjectPool pool, int id, DynamicObjectBox dynamicObjectBox)
         {
-            var ret = new ObjectOut
+            var ret = new ObjectBox
             {
                 Pool = pool,
                 Id = id,
@@ -56,7 +56,7 @@ namespace Cosmos.Disposables.ObjectPools
                 LastGetTime = DateTime.Now
             };
 
-            ret.SetDynamicObjectOut(dynamicObjectOut);
+            ret.SetDynamicObjectOut(dynamicObjectBox);
 
             return ret;
         }

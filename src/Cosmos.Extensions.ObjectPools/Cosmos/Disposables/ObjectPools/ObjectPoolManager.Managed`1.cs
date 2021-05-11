@@ -74,7 +74,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <returns></returns>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static IObjectPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 => ManagedModels.Create<T, TManagedModel>(poolSize, createObjectFunc, getObjectHandler);
 
             /// <summary>
@@ -88,7 +88,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentException"></exception>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static IObjectPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 => ManagedModels.Create<T, TManagedModel>(name, poolSize, createObjectFunc, getObjectHandler);
 
             /// <summary>
@@ -176,7 +176,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <returns></returns>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static IObjectPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 => ManagedModels.GetOrCreate<T, TManagedModel>(poolSize, createObjectFunc, getObjectHandler);
 
             /// <summary>
@@ -210,7 +210,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <returns></returns>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static IObjectPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectOut<T>> getObjectHandler = null)
+            public static IObjectPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectBox<T>> getObjectHandler = null)
                 => ManagedModels.GetOrCreate<T, TManagedModel>(name, poolSize, createObjectFunc, getObjectHandler);
 
             /// <summary>

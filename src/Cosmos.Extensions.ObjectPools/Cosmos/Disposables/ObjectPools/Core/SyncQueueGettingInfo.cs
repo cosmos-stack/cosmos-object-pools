@@ -24,11 +24,11 @@ namespace Cosmos.Disposables.ObjectPools.Core
             });
         }
 
-        internal ManualResetEventSlim Wait { get; set; } = new ManualResetEventSlim();
+        internal ManualResetEventSlim Wait { get; set; } = new();
 
         internal TObjectOut ReturnValue { get; set; }
 
-        internal object Lock = new object();
+        internal object Lock = new();
 
         internal bool IsTimeout { get; set; }
     }
