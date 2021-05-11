@@ -23,42 +23,42 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// Total times acquired<br />
         /// 被获取的总次数
         /// </summary>
-        long GetTimes { get; }
+        long TotalAcquiredTimes { get; }
 
         /// <summary>
         /// Time of last acquisition.<br />
         /// 最后一次被获取的时间
         /// </summary>
-        DateTime LastGetTime { get; }
+        DateTime LastAcquiredTime { get; }
 
         /// <summary>
         /// The time when it was last returned.<br />
         /// 最后归还时的时间
         /// </summary>
-        DateTime LastReturnTime { get; }
+        DateTime LastRecycledTime { get; }
 
         /// <summary>
         /// Created time<br />
         /// 创建时间
         /// </summary>
-        DateTime CreateTime { get; }
+        DateTime CreatedTime { get; }
 
         /// <summary>
         /// Thread ID at last acquisition.<br />
         /// 最后获取时的线程 Id
         /// </summary>
-        int LastGetThreadId { get; }
+        int LastAcquiredThreadId { get; }
 
         /// <summary>
         /// The thread ID at the time of the last return.<br />
         /// 最后归还时的线程 Id
         /// </summary>
-        int LastReturnThreadId { get; }
+        int LastRecycledThreadId { get; }
 
         /// <summary>
         /// Reset Value<br />
         /// 重置 Value 值
         /// </summary>
-        void ResetValue();
+        void Reset();
     }
 }

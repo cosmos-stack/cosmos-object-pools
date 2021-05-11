@@ -1,4 +1,5 @@
 using System;
+using Cosmos.Disposables.ObjectPools.Statistics;
 
 namespace Cosmos.Disposables.ObjectPools.Core
 {
@@ -7,7 +8,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// </summary>
     internal static class ExceptionHelper
     {
-        public static Exception CA_UnableToObtainResources(string statistics)
+        public static Exception CA_UnableToObtainResources(StatisticsInfo statistics)
         {
             return new($"CheckAvailable: unable to obtain resource. {statistics}");
         }
@@ -17,7 +18,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
             return new("CheckAvailable: Resources are still unavailable.");
         }
 
-        public static Exception LCA_UnableToObtainResources(string statistics)
+        public static Exception LCA_UnableToObtainResources(StatisticsInfo statistics)
         {
             return new($"LiveCheckAvailable: unable to obtain resource. {statistics}");
         }

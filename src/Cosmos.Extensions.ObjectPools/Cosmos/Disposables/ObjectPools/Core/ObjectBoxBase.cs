@@ -1,5 +1,5 @@
 using System;
-using System.Text;
+using Cosmos.Disposables.ObjectPools.Statistics;
 using Cosmos.IdUtils;
 
 namespace Cosmos.Disposables.ObjectPools.Core
@@ -67,46 +67,46 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// Total times acquired
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        internal long _getTimes;
+        internal long _totalAcquiredTimes;
 
         /// <inheritdoc />
-        public long GetTimes => _getTimes;
+        public long TotalAcquiredTimes => _totalAcquiredTimes;
 
         #endregion
 
         #region Opt time and Id
 
         /// <inheritdoc />
-        public DateTime LastGetTime { get; internal set; }
+        public DateTime LastAcquiredTime { get; internal set; }
 
         /// <inheritdoc />
-        public DateTime LastReturnTime { get; internal set; }
+        public DateTime LastRecycledTime { get; internal set; }
 
         /// <inheritdoc />
-        public DateTime CreateTime { get; internal set; } = DateTime.Now;
+        public DateTime CreatedTime { get; } = DateTime.Now;
 
         /// <inheritdoc />
-        public int LastGetThreadId { get; internal set; }
+        public int LastAcquiredThreadId { get; internal set; }
 
         /// <inheritdoc />
-        public int LastReturnThreadId { get; internal set; }
+        public int LastRecycledThreadId { get; internal set; }
 
         #endregion
 
         #region ResetValue
 
         /// <inheritdoc />
-        public abstract void ResetValue();
+        public abstract void Reset();
 
         #endregion
 
-        #region Return
+        #region Recycle
 
         /// <summary>
         /// Is returned
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        internal bool _isReturned = false;
+        internal bool _isRecycled = false;
 
         #endregion
 
@@ -114,6 +114,21 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
         /// <inheritdoc />
         public abstract void Dispose();
+
+        #endregion
+
+        #region Statistics
+
+        public ObjectBoxStatisticsInfo GetStatisticsInfo()
+        {
+            return new(
+                $"{Value}",
+                TotalAcquiredTimes,
+                LastAcquiredThreadId,
+                LastRecycledThreadId,
+                LastAcquiredTime,
+                LastRecycledTime);
+        }
 
         #endregion
 
@@ -128,13 +143,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// <inheritdoc />
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append($"{Value}, ");
-            sb.Append($"Times: {GetTimes}, ");
-            sb.Append($"ThreadId(R/G): {LastReturnThreadId}/{LastGetThreadId}, ");
-            sb.Append($"Time(R/G): {LastReturnTime:yyyy-MM-dd HH:mm:ss:ms}/{LastGetTime:yyyy-MM-dd HH:mm:ss:ms}");
-
-            return sb.ToString();
+            return GetStatisticsInfo().ToString();
         }
 
         #endregion

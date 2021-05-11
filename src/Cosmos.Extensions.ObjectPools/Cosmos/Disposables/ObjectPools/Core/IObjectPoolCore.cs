@@ -1,4 +1,5 @@
 using System;
+using Cosmos.Disposables.ObjectPools.Statistics;
 
 namespace Cosmos.Disposables.ObjectPools.Core
 {
@@ -11,7 +12,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// Gets policy
         /// </summary>
         TPolicy Policy { get; }
-        
+
         /// <summary>
         /// Is available<br />
         /// 是否可用
@@ -44,12 +45,12 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// Statistics of objects in the object pool.<br />
         /// 统计对象池中的对象
         /// </summary>
-        string Statistics { get; }
+        StatisticsInfo GetStatisticsInfo();
 
         /// <summary>
         /// Completely count the objects in the object pool.<br />
         /// 统计对象池中的对象（完整)
         /// </summary>
-        string StatisticsFully { get; }
+        FullStatisticsInfo GetStatisticsInfoFully();
     }
 }

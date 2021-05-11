@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cosmos.Disposables.ObjectPools.Core.Display;
+using Cosmos.Disposables.ObjectPools.Statistics;
 
 namespace Cosmos.Disposables.ObjectPools.Core
 {
@@ -45,14 +46,14 @@ namespace Cosmos.Disposables.ObjectPools.Core
             }
         }
 
-        private readonly List<TObject> _allObjects = new List<TObject>();
-        private readonly object _allObjectsLockObj = new object();
+        private readonly List<TObject> _allObjects = new();
+        private readonly object _allObjectsLockObj = new();
 
-        private readonly ConcurrentStack<TObject> _freeObjects = new ConcurrentStack<TObject>();
+        private readonly ConcurrentStack<TObject> _freeObjects = new();
 
-        private readonly ConcurrentQueue<bool> _getQueue = new ConcurrentQueue<bool>();
-        private readonly ConcurrentQueue<SyncQueueGettingInfo<TObject>> _getSyncQueue = new ConcurrentQueue<SyncQueueGettingInfo<TObject>>();
-        private readonly ConcurrentQueue<TaskCompletionSource<TObject>> _getAsyncQueue = new ConcurrentQueue<TaskCompletionSource<TObject>>();
+        private readonly ConcurrentQueue<bool> _getQueue = new();
+        private readonly ConcurrentQueue<SyncQueueGettingInfo<TObject>> _getSyncQueue = new();
+        private readonly ConcurrentQueue<TaskCompletionSource<TObject>> _getAsyncQueue = new();
 
         /// <summary>
         /// Gets policy
@@ -66,7 +67,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
         #region Available and unavailable
 
-        private readonly object _unavailableLockObj = new object();
+        private readonly object _unavailableLockObj = new();
         private bool _running = true;
 
         /// <inheritdoc />
@@ -131,7 +132,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                     {
                         var conn = GetOrCreateFreeObject(false);
                         if (conn is null)
-                            throw ExceptionHelper.CA_UnableToObtainResources(Statistics);
+                            throw ExceptionHelper.CA_UnableToObtainResources(GetStatisticsInfo());
 
                         try
                         {
@@ -178,7 +179,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
             if (isRestored)
             {
                 lock (_allObjectsLockObj)
-                    _allObjects.ForEach(a => a.LastGetTime = a.LastReturnTime = new DateTime(2000, 1, 1));
+                    _allObjects.ForEach(a => a.LastAcquiredTime = a.LastRecycledTime = new DateTime(2000, 1, 1));
 
                 Policy.OnAvailable();
 
@@ -197,7 +198,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
             {
                 var conn = GetOrCreateFreeObject(false);
                 if (conn is null)
-                    throw ExceptionHelper.LCA_UnableToObtainResources(Statistics);
+                    throw ExceptionHelper.LCA_UnableToObtainResources(GetStatisticsInfo());
 
                 try
                 {
@@ -224,40 +225,23 @@ namespace Cosmos.Disposables.ObjectPools.Core
         #region Statistics
 
         /// <inheritdoc />
-        public string Statistics
+        public StatisticsInfo GetStatisticsInfo()
         {
-            get
-            {
-                var sb = new StringBuilder();
-                sb.Append($"Pool: {_freeObjects.Count}/{_allObjects.Count}, ");
-                sb.Append($"Get wait: {_getSyncQueue.Count}, ");
-                sb.Append($"GetAsync wait: {_getAsyncQueue.Count}");
-                return sb.ToString();
-            }
+            return new(
+                _freeObjects.Count,
+                _allObjects.Count,
+                _getSyncQueue.Count,
+                _getAsyncQueue.Count
+            );
         }
 
         /// <inheritdoc />
-        public string StatisticsFully
+        public FullStatisticsInfo GetStatisticsInfoFully()
         {
-            get
-            {
-                var sb = new StringBuilder();
-
-                sb.AppendLine($"Mode: {Mode}");
-                sb.AppendLine(Statistics);
-                sb.AppendLine("");
-
-                foreach (var obj in _allObjects)
-                {
-                    sb.Append($"{obj.Value}, ");
-                    sb.Append($"Times: {obj.GetTimes}, ");
-                    sb.Append($"ThreadId(R/G): {obj.LastReturnThreadId}/{obj.LastGetThreadId}, ");
-                    sb.Append($"Time(R/G): {obj.LastReturnTime:yyyy-MM-dd HH:mm:ss:ms}/{obj.LastGetTime:yyyy-MM-dd HH:mm:ss:ms}");
-                    sb.AppendLine();
-                }
-
-                return sb.ToString();
-            }
+            return new(
+                Mode,
+                GetStatisticsInfo(),
+                _allObjects.Select(x => x.GetStatisticsInfo()));
         }
 
         #endregion
@@ -293,17 +277,17 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
             // If the resource object is not empty at this time, it is marked as unreturned. Prepare to lend the resource.
             if (obj != null)
-                obj._isReturned = false;
+                obj._isRecycled = false;
 
             // If the resource object is not empty at this time, but the value is empty (indicating that it has been Disposed);
             // or the resource object is not empty, but the idle time exceeds the value configured by the policy,
             // it will be reset.
             if (obj != null && obj.Value is null ||
-                obj != null && Policy.IdleTimeout > TimeSpan.Zero && DateTime.Now.Subtract(obj.LastReturnTime) > Policy.IdleTimeout)
+                obj != null && Policy.IdleTimeout > TimeSpan.Zero && DateTime.Now.Subtract(obj.LastRecycledTime) > Policy.IdleTimeout)
             {
                 try
                 {
-                    obj.ResetValue();
+                    obj.Reset();
                 }
                 catch
                 {
@@ -379,9 +363,9 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 throw;
             }
 
-            obj.LastGetThreadId = Thread.CurrentThread.ManagedThreadId;
-            obj.LastGetTime = DateTime.Now;
-            Interlocked.Increment(ref obj._getTimes);
+            obj.LastAcquiredThreadId = Thread.CurrentThread.ManagedThreadId;
+            obj.LastAcquiredTime = DateTime.Now;
+            Interlocked.Increment(ref obj._totalAcquiredTimes);
 
             return obj;
         }
@@ -435,9 +419,9 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 throw;
             }
 
-            obj.LastGetThreadId = Thread.CurrentThread.ManagedThreadId;
-            obj.LastGetTime = DateTime.Now;
-            Interlocked.Increment(ref obj._getTimes);
+            obj.LastAcquiredThreadId = Thread.CurrentThread.ManagedThreadId;
+            obj.LastAcquiredTime = DateTime.Now;
+            Interlocked.Increment(ref obj._totalAcquiredTimes);
 
             return obj;
         }
@@ -452,7 +436,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         {
             if (obj is null) return;
 
-            if (obj._isReturned) return;
+            if (obj._isRecycled) return;
 
             if (_running == false)
             {
@@ -469,7 +453,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 return;
             }
 
-            if (isReset) obj.ResetValue();
+            if (isReset) obj.Reset();
 
             var isReturn = false;
 
@@ -485,8 +469,8 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
                         if (queueItem.ReturnValue != null)
                         {
-                            obj.LastReturnThreadId = Thread.CurrentThread.ManagedThreadId;
-                            obj.LastReturnTime = DateTime.Now;
+                            obj.LastRecycledThreadId = Thread.CurrentThread.ManagedThreadId;
+                            obj.LastRecycledTime = DateTime.Now;
 
                             try
                             {
@@ -513,8 +497,8 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 {
                     if (_getAsyncQueue.TryDequeue(out var tcs) && tcs != null && tcs.Task.IsCanceled == false)
                     {
-                        obj.LastReturnThreadId = Thread.CurrentThread.ManagedThreadId;
-                        obj.LastReturnTime = DateTime.Now;
+                        obj.LastRecycledThreadId = Thread.CurrentThread.ManagedThreadId;
+                        obj.LastRecycledTime = DateTime.Now;
 
                         try
                         {
@@ -537,9 +521,9 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 }
                 finally
                 {
-                    obj.LastReturnThreadId = Thread.CurrentThread.ManagedThreadId;
-                    obj.LastReturnTime = DateTime.Now;
-                    obj._isReturned = true;
+                    obj.LastRecycledThreadId = Thread.CurrentThread.ManagedThreadId;
+                    obj.LastRecycledTime = DateTime.Now;
+                    obj._isRecycled = true;
 
                     _freeObjects.Push(obj);
                 }

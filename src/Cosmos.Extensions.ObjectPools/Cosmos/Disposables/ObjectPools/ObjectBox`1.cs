@@ -35,8 +35,8 @@ namespace Cosmos.Disposables.ObjectPools
                 Pool = pool,
                 Id = id,
                 Value = value,
-                LastGetThreadId = Thread.CurrentThread.ManagedThreadId,
-                LastGetTime = DateTime.Now
+                LastAcquiredThreadId = Thread.CurrentThread.ManagedThreadId,
+                LastAcquiredTime = DateTime.Now
             };
         }
 
@@ -54,8 +54,8 @@ namespace Cosmos.Disposables.ObjectPools
             {
                 Pool = pool,
                 Id = id,
-                LastGetThreadId = Thread.CurrentThread.ManagedThreadId,
-                LastGetTime = DateTime.Now
+                LastAcquiredThreadId = Thread.CurrentThread.ManagedThreadId,
+                LastAcquiredTime = DateTime.Now
             };
 
             ret.SetDynamicObjectOut(dynamicObjectBox);
@@ -72,7 +72,7 @@ namespace Cosmos.Disposables.ObjectPools
         public IObjectPool<T> Pool { get; internal set; }
 
         /// <inheritdoc />
-        public override void ResetValue()
+        public override void Reset()
         {
             if (Value is not null)
             {
@@ -81,7 +81,7 @@ namespace Cosmos.Disposables.ObjectPools
             }
 
             Value = Try.Create(Pool.Policy.OnCreate).GetSafeValue(default(T));
-            LastReturnTime = DateTime.Now;
+            LastRecycledTime = DateTime.Now;
         }
 
         /// <inheritdoc />
