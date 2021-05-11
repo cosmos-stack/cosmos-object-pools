@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Cosmos.ObjectPools\Cosmos.ObjectPools.csproj" />
+      <ProjectReference Include="..\..\src\Cosmos.Extensions.ObjectPools\Cosmos.Extensions.ObjectPools.csproj" />
     </ItemGroup>
 
 </Project>

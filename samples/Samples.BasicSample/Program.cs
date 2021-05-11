@@ -45,7 +45,7 @@ namespace Samples.BasicSample
 
         private static SampleModel CreateObject() => new SampleModel();
 
-        private static void OnGetObject(ObjectOut<SampleModel> model)
+        private static void OnGetObject(ObjectBox<SampleModel> model)
         {
             if (DateTime.Now.Subtract(model.LastGetTime).TotalSeconds > 3)
             {
