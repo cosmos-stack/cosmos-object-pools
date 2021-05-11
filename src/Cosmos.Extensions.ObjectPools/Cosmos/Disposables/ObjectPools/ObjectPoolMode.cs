@@ -1,4 +1,4 @@
-namespace Cosmos.Disposables.ObjectPools.Core
+namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
     /// Object pool mode
