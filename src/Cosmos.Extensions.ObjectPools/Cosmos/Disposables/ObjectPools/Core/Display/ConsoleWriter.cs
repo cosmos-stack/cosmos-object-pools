@@ -1,6 +1,6 @@
 using System;
 
-namespace Cosmos.Disposables.ObjectPools.Core
+namespace Cosmos.Disposables.ObjectPools.Core.Display
 {
     /// <summary>
     /// Display helper
