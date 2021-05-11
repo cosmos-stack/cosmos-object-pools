@@ -1,0 +1,8 @@
+<Project>
+
+    <ItemGroup>
+        <PackageReference Include="Cosmos.Extensions.Asyncs" Version="$(Standard-PkgVersion)" />
+        <PackageReference Include="Cosmos.Prowess" Version="$(Prowess-PkgVersion)" />
+    </ItemGroup>
+    
+</Project>

@@ -1,35 +1,55 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Append Solution Items", "Append Solution Items", "{DD1E6C10-5267-4354-895C-DCAE95F643B5}"
-ProjectSection(SolutionItems) = preProject
-	.gitignore = .gitignore
-	LICENSE = LICENSE
-	NuGet.config = NuGet.config
-	Publish.bat = Publish.bat
-	PublishToAlexinea.bat = PublishToAlexinea.bat
-	PublishToMyGet.bat = PublishToMyGet.bat
-	README.md = README.md
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{560A09EA-9858-4EE7-95C7-80DCC5F93C0D}"
-ProjectSection(SolutionItems) = preProject
-	build\common.props = build\common.props
-	build\misc.props = build\misc.props
-	build\package.props = build\package.props
-	build\version.props = build\version.props
-EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28AE249C-7974-40FB-B271-F146D4359BC8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{85EE02B9-5483-4FE0-9740-FA5E690388C3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{946B7C7A-063A-4519-B769-58A941E214FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cosmos.ObjectPools", "src\Cosmos.ObjectPools\Cosmos.ObjectPools.csproj", "{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cosmos.Extensions.ObjectPools", "src\Cosmos.Extensions.ObjectPools\Cosmos.Extensions.ObjectPools.csproj", "{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.BasicSample", "samples\Samples.BasicSample\Samples.BasicSample.csproj", "{D2B12B8B-A060-427C-8205-D19BE5B850C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.BasicSample.NonGeneric", "samples\Samples.BasicSample.NonGeneric\Samples.BasicSample.NonGeneric.csproj", "{46EC3DFD-42CB-4F73-809F-B47A77B63B5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9A47169E-EE73-421F-BAB5-20E819B1A440}"
+ProjectSection(SolutionItems) = preProject
+	README.md = README.md
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{267B5891-D3D1-4AA7-A1BF-8BCB5E23CB9A}"
+ProjectSection(SolutionItems) = preProject
+	build\PublishBetaVersion_Script.bat = build\PublishBetaVersion_Script.bat
+	build\PublishNightlyVersion_Script.bat = build\PublishNightlyVersion_Script.bat
+	build\PublishReleaseVersion_Script.bat = build\PublishReleaseVersion_Script.bat
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asset", "asset", "{BA3AB360-8A4E-438F-95C0-D6730050F5CB}"
+ProjectSection(SolutionItems) = preProject
+	asset\version.dev.props = asset\version.dev.props
+	asset\version.props = asset\version.props
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{767E7784-B30A-41EE-871B-33B35160D196}"
+ProjectSection(SolutionItems) = preProject
+	asset\images\icon.back.png = asset\images\icon.back.png
+	asset\images\icon.png = asset\images\icon.png
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{85CA81C4-4E75-45AA-820F-100A80EB6F6C}"
+ProjectSection(SolutionItems) = preProject
+	asset\props\misc.props = asset\props\misc.props
+	asset\props\package.props = asset\props\package.props
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{82E226FD-97E2-42EB-B461-10F480EC7ECD}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	common.props = common.props
+	common.tests.props = common.tests.props
+	LICENSE = LICENSE
+	logo.png = logo.png
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +57,11 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{560A09EA-9858-4EE7-95C7-80DCC5F93C0D} = {DD1E6C10-5267-4354-895C-DCAE95F643B5}
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F} = {28AE249C-7974-40FB-B271-F146D4359BC8}
 		{D2B12B8B-A060-427C-8205-D19BE5B850C8} = {85EE02B9-5483-4FE0-9740-FA5E690388C3}
 		{46EC3DFD-42CB-4F73-809F-B47A77B63B5E} = {85EE02B9-5483-4FE0-9740-FA5E690388C3}
+		{767E7784-B30A-41EE-871B-33B35160D196} = {BA3AB360-8A4E-438F-95C0-D6730050F5CB}
+		{85CA81C4-4E75-45AA-820F-100A80EB6F6C} = {BA3AB360-8A4E-438F-95C0-D6730050F5CB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B2EA6256-AD1E-4A6D-B26C-8C0EEF6E611F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

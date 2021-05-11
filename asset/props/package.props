@@ -1,0 +1,12 @@
+<Project>
+	<PropertyGroup Label="Package">
+		<Product>Cosmos.ObjectPools</Product>
+		<Authors>AlexLEWIS;Cosmos</Authors>
+		<RepositoryUrl>https://github.com/cosmos-loops/cosmos-objectpools</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/cosmos-loops/cosmos-objectpools</PackageProjectUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageTags>Cosmos;Cosmosloops;ObjectPools;Framework</PackageTags>
+	</PropertyGroup>
+</Project>
