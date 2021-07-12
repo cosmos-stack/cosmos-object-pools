@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Cosmos.Disposables.ObjectPools;
-using Cosmos.Disposables.ObjectPools.Managed;
+using Cosmos.Disposables.ObjectPools.Pools;
 
 namespace Samples.BasicSample
 {
@@ -31,12 +31,12 @@ namespace Samples.BasicSample
                 {
                     for (var j = 0; j < 1_000; j++)
                     {
-                        var item = pool.Get();
+                        var item = pool.Acquire();
                         //Console.WriteLine($"ThreadId={Thread.CurrentThread.ManagedThreadId}, Value={item.Value.Value}");
-                        pool.Return(item);
+                        pool.Recycle(item);
                     }
 
-                    Console.WriteLine(pool.StatisticsFully);
+                    Console.WriteLine(pool.GetStatisticsInfoFully());
                 }).Start();
             }
 
@@ -45,9 +45,9 @@ namespace Samples.BasicSample
 
         private static SampleModel CreateObject() => new SampleModel();
 
-        private static void OnGetObject(ObjectBox<SampleModel> model)
+        private static void OnGetObject(ObjectCellSite<SampleModel> model)
         {
-            if (DateTime.Now.Subtract(model.LastGetTime).TotalSeconds > 3)
+            if (DateTime.Now.Subtract(model.LastAcquiredTime).TotalSeconds > 3)
             {
                 model.Value.Value += " +3sec";
             }
