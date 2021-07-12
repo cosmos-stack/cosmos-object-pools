@@ -1,8 +1,8 @@
 <Project>
 
     <PropertyGroup>
-        <Standard-PkgVersion>0.1.8</Standard-PkgVersion>
-        <Prowess-PkgVersion>0.1.6.9</Prowess-PkgVersion>
+        <Standard-PkgVersion>0.1.8.9</Standard-PkgVersion>
+        <Prowess-PkgVersion>0.1.7.8</Prowess-PkgVersion>
     </PropertyGroup>
 
 </Project>

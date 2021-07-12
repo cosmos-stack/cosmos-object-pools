@@ -19,16 +19,15 @@ EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{267B5891-D3D1-4AA7-A1BF-8BCB5E23CB9A}"
 ProjectSection(SolutionItems) = preProject
-	build\PublishBetaVersion_Script.bat = build\PublishBetaVersion_Script.bat
-	build\PublishNightlyVersion_Script.bat = build\PublishNightlyVersion_Script.bat
-	build\PublishReleaseVersion_Script.bat = build\PublishReleaseVersion_Script.bat
+	build\Beta.bat = build\Beta.bat
+	build\Beta_WithoutBuild.bat = build\Beta_WithoutBuild.bat
+	build\Nightly.bat = build\Nightly.bat
+	build\Nightly_WithoutBuild.bat = build\Nightly_WithoutBuild.bat
+	build\Release.bat = build\Release.bat
+	build\Release_WithoutBuild.bat = build\Release_WithoutBuild.bat
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asset", "asset", "{BA3AB360-8A4E-438F-95C0-D6730050F5CB}"
-ProjectSection(SolutionItems) = preProject
-	asset\version.dev.props = asset\version.dev.props
-	asset\version.props = asset\version.props
-EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{767E7784-B30A-41EE-871B-33B35160D196}"
 ProjectSection(SolutionItems) = preProject
@@ -49,6 +48,8 @@ ProjectSection(SolutionItems) = preProject
 	common.tests.props = common.tests.props
 	LICENSE = LICENSE
 	logo.png = logo.png
+	asset\version.props = asset\version.props
+	asset\version.dev.props = asset\version.dev.props
 EndProjectSection
 EndProject
 Global
