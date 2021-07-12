@@ -1,5 +1,5 @@
 using System;
-using Cosmos.Disposables.ObjectPools.Managed;
+using Cosmos.Disposables.ObjectPools.Pools;
 using Opt = Cosmos.Disposables.ObjectPools.ObjectPoolManager.NonGeneric.ManagedModelOpt;
 
 // ReSharper disable InconsistentNaming
@@ -21,7 +21,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// </summary>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static Opt Managed(Type managedModelType) => new Opt(managedModelType);
+            public static Opt Managed(Type managedModelType) => new(managedModelType);
 
             /// <summary>
             /// Managed
@@ -29,7 +29,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static Opt Managed<TManagedModel>() where TManagedModel : class, IObjectPoolManagedModel => new Opt(typeof(TManagedModel));
+            public static Opt Managed<TManagedModel>() where TManagedModel : class, IObjectPoolManagedModel => new(typeof(TManagedModel));
 
             /// <summary>
             /// Managed model operator
@@ -87,7 +87,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <exception cref="InvalidOperationException"> Unknown type.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool Get(this Opt opt, Type type)
+        public static IObjectCellPool Get(this Opt opt, Type type)
             => ObjectPoolManager.ManagedModels.Get(opt.ManagedModelType, type);
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        public static IObjectPool Get(this Opt opt, Type type, string name)
+        public static IObjectCellPool Get(this Opt opt, Type type, string name)
             => ObjectPoolManager.ManagedModels.Get(opt.ManagedModelType, type, name);
 
         #endregion
@@ -115,7 +115,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <param name="opt"></param>
         /// <returns></returns>
-        public static IObjectPool Create<T>(this Opt opt, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
+        public static IObjectCellPool Create<T>(this Opt opt, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, typeof(T), poolSize, createObjectFunc, getObjectHandler);
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <param name="opt"></param>
         /// <returns></returns>
-        public static IObjectPool Create<T>(this Opt opt, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
+        public static IObjectCellPool Create<T>(this Opt opt, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, typeof(T), name, poolSize, createObjectFunc, getObjectHandler);
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <param name="opt"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
+        public static IObjectCellPool Create(this Opt opt, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, type, poolSize, createObjectFunc, getObjectHandler);
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <param name="opt"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
+        public static IObjectCellPool Create(this Opt opt, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, type, name, poolSize, createObjectFunc, getObjectHandler);
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="opt"></param>
         /// <param name="policy"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, IPolicy policy)
+        public static IObjectCellPool Create(this Opt opt, IPolicy policy)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, policy);
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="opt"></param>
         /// <param name="pool"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, IObjectPool pool)
+        public static IObjectCellPool Create(this Opt opt, IObjectCellPool pool)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, pool);
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="opt"></param>
         /// <param name="poolFunc"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, Func<IObjectPool> poolFunc)
+        public static IObjectCellPool Create(this Opt opt, Func<IObjectCellPool> poolFunc)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, poolFunc);
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="name"></param>
         /// <param name="policy"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, string name, IPolicy policy)
+        public static IObjectCellPool Create(this Opt opt, string name, IPolicy policy)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, name, policy);
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="name"></param>
         /// <param name="pool"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, string name, IObjectPool pool)
+        public static IObjectCellPool Create(this Opt opt, string name, IObjectCellPool pool)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, name, pool);
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="name"></param>
         /// <param name="poolFunc"></param>
         /// <returns></returns>
-        public static IObjectPool Create(this Opt opt, string name, Func<IObjectPool> poolFunc)
+        public static IObjectCellPool Create(this Opt opt, string name, Func<IObjectCellPool> poolFunc)
             => ObjectPoolManager.ManagedModels.Create(opt.ManagedModelType, name, poolFunc);
 
         #endregion
@@ -226,7 +226,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool GetOrCreate(this Opt opt, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
+        public static IObjectCellPool GetOrCreate(this Opt opt, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
             => ObjectPoolManager.ManagedModels.GetOrCreate(opt.ManagedModelType, type, poolSize, createObjectFunc, getObjectHandler);
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="policy"></param>
         /// <returns></returns>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool GetOrCreate(this Opt opt, Type type, IPolicy policy)
+        public static IObjectCellPool GetOrCreate(this Opt opt, Type type, IPolicy policy)
             => ObjectPoolManager.ManagedModels.GetOrCreate(opt.ManagedModelType, type, policy);
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool GetOrCreate(this Opt opt, Type type, Func<IObjectPool> insteadOfFactory)
+        public static IObjectCellPool GetOrCreate(this Opt opt, Type type, Func<IObjectCellPool> insteadOfFactory)
             => ObjectPoolManager.ManagedModels.GetOrCreate(opt.ManagedModelType, type, insteadOfFactory);
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool GetOrCreate(this Opt opt, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectBox> getObjectHandler = null)
+        public static IObjectCellPool GetOrCreate(this Opt opt, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
             => ObjectPoolManager.ManagedModels.GetOrCreate(opt.ManagedModelType, type, name, poolSize, createObjectFunc, getObjectHandler);
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="policy"></param>
         /// <returns></returns>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool GetOrCreate(this Opt opt, Type type, string name, IPolicy policy)
+        public static IObjectCellPool GetOrCreate(this Opt opt, Type type, string name, IPolicy policy)
             => ObjectPoolManager.ManagedModels.GetOrCreate(opt.ManagedModelType, type, name, policy);
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         // ReSharper disable once MemberHidesStaticFromOuterClass
-        public static IObjectPool GetOrCreate(this Opt opt, Type type, string name, Func<IObjectPool> insteadOfFactory)
+        public static IObjectCellPool GetOrCreate(this Opt opt, Type type, string name, Func<IObjectCellPool> insteadOfFactory)
             => ObjectPoolManager.ManagedModels.GetOrCreate(opt.ManagedModelType, type, name, insteadOfFactory);
 
         #endregion

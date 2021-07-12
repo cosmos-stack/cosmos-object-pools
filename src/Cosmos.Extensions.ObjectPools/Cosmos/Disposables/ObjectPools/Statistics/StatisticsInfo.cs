@@ -4,7 +4,7 @@ namespace Cosmos.Disposables.ObjectPools.Statistics
 {
     public struct StatisticsInfo
     {
-        public StatisticsInfo(
+        internal StatisticsInfo(
             int countOfFreeObjects,
             int countOfAllObjects,
             int itemsInSyncQueue,

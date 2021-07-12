@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace Cosmos.Disposables.ObjectPools.Managed
+namespace Cosmos.Disposables.ObjectPools.Pools
 {
     /// <summary>
     /// Object pool managed model
@@ -25,12 +25,12 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         }
 
         /// <inheritdoc />
-        public IObjectPool<T> GetDefaultTyped<T>()
+        public IObjectCellPool<T> GetDefaultTyped<T>()
         {
             if (_defaultTypedObjectPools.TryGetValue(typeof(T), out var mid))
-                if (mid is IObjectPool<T> pool)
+                if (mid is IObjectCellPool<T> pool)
                     return pool;
-                else if (mid is IObjectPool)
+                else if (mid is IObjectCellPool)
                     throw new ArgumentException("Use the non-generic version of 'GetDefaultTyped' method.");
                 else
                     throw new InvalidOperationException($"Unknown type: {typeof(T)}");
@@ -38,10 +38,10 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         }
 
         /// <inheritdoc />
-        public IObjectPool GetDefaultTyped(Type type)
+        public IObjectCellPool GetDefaultTyped(Type type)
         {
             if (_defaultTypedObjectPools.TryGetValue(type, out var mid))
-                if (mid is IObjectPool pool)
+                if (mid is IObjectCellPool pool)
                     return pool;
                 else
                     throw new InvalidOperationException($"Unknown type: {type}");
@@ -49,12 +49,12 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         }
 
         /// <inheritdoc />
-        public IObjectPool<T> Get<T>(string name)
+        public IObjectCellPool<T> Get<T>(string name)
         {
             if (_namedTypedObjectPools.TryGetValue((typeof(T), name), out var mid))
-                if (mid is IObjectPool<T> pool)
+                if (mid is IObjectCellPool<T> pool)
                     return pool;
-                else if (mid is IObjectPool)
+                else if (mid is IObjectCellPool)
                     throw new ArgumentException("Use the non-generic version of 'GetDefaultTyped' method.");
                 else
                     throw new InvalidOperationException($"Unknown type ('{typeof(T)}') or name ('{name}').");
@@ -62,10 +62,10 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         }
 
         /// <inheritdoc />
-        public IObjectPool Get(Type type, string name)
+        public IObjectCellPool Get(Type type, string name)
         {
             if (_namedTypedObjectPools.TryGetValue((type, name), out var mid))
-                if (mid is IObjectPool pool)
+                if (mid is IObjectCellPool pool)
                     return pool;
                 else
                     throw new InvalidOperationException($"Unknown type ('{type}') or name ('{name}').");

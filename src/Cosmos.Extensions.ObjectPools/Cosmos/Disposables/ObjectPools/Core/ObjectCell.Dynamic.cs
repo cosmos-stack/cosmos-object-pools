@@ -5,17 +5,17 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <summary>
     /// Dynamic object out
     /// </summary>
-    public readonly struct DynamicObjectBox
+    public readonly struct DynamicObjectCell
     {
         private readonly dynamic _dynamicValue;
         private readonly Type _type;
 
         /// <summary>
-        /// Create an instance of <see cref="DynamicObjectBox"/>.
+        /// Create an instance of <see cref="DynamicObjectCell"/>.
         /// </summary>
         /// <param name="dynamicValue"></param>
         /// <param name="type"></param>
-        public DynamicObjectBox(in dynamic dynamicValue, in Type type)
+        public DynamicObjectCell(in dynamic dynamicValue, in Type type)
         {
             _dynamicValue = dynamicValue;
             _type = type;

@@ -5,7 +5,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <summary>
     /// Interface for Object
     /// </summary>
-    public interface IObjectBox : IDisposable
+    public interface IObjectCell : IDisposable
     {
         /// <summary>
         /// Unique identifier in the object pool.<br />
@@ -17,7 +17,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// Get a copy of DynamicObjectOut instance.
         /// </summary>
         /// <returns></returns>
-        DynamicObjectBox GetDynamicObjectOut();
+        DynamicObjectCell GetDynamicObjectOut();
 
         /// <summary>
         /// Total times acquired<br />

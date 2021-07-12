@@ -7,23 +7,23 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <summary>
     /// Base recyclable object
     /// </summary>
-    public abstract class ObjectBoxBase<T> : IObjectBox
+    public abstract class ObjectCell<T> : IObjectCell
     {
         /// <summary>
-        /// Create a new instance of <see cref="ObjectBoxBase{T}"/>
+        /// Create a new instance of <see cref="ObjectCell{T}"/>
         /// </summary>
-        protected ObjectBoxBase()
+        protected ObjectCell()
         {
             InternalIdentity = RandomNonceStrProvider.Create(32);
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ObjectBoxBase{T}"/>
+        /// Create a new instance of <see cref="ObjectCell{T}"/>
         /// </summary>
-        protected internal ObjectBoxBase(string internalId, DynamicObjectBox dynamicObjectBox)
+        protected internal ObjectCell(string internalId, DynamicObjectCell dynamicObjectCell)
         {
             InternalIdentity = internalId;
-            _dynamicObjectBox = dynamicObjectBox;
+            _dynamicObjectCell = dynamicObjectCell;
         }
 
         #region Outter Id and internal Id
@@ -43,21 +43,21 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// <summary>
         /// Dynamic object out
         /// </summary>
-        private DynamicObjectBox _dynamicObjectBox;
+        private DynamicObjectCell _dynamicObjectCell;
 
         /// <summary>
         /// Value
         /// </summary>
         public T Value
         {
-            get => _dynamicObjectBox.GetValue<T>();
-            internal set => _dynamicObjectBox = new DynamicObjectBox(value, typeof(T));
+            get => _dynamicObjectCell.GetValue<T>();
+            internal set => _dynamicObjectCell = new DynamicObjectCell(value, typeof(T));
         }
 
         /// <inheritdoc />
-        public DynamicObjectBox GetDynamicObjectOut() => _dynamicObjectBox;
+        public DynamicObjectCell GetDynamicObjectOut() => _dynamicObjectCell;
 
-        internal void SetDynamicObjectOut(DynamicObjectBox dynamicObjectBox) => _dynamicObjectBox = dynamicObjectBox;
+        internal void SetDynamicObjectOut(DynamicObjectCell dynamicObjectCell) => _dynamicObjectCell = dynamicObjectCell;
 
         #endregion
 

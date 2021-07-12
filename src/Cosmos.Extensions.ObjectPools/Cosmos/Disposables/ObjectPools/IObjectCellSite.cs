@@ -3,15 +3,14 @@ using Cosmos.Disposables.ObjectPools.Core;
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
-    /// Interface for Object{T}
+    /// Interface for non-generic Object
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IObject<out T> : IObjectBox
+    public interface IObjectCellSite : IObjectCell
     {
         /// <summary>
         /// Resource object.<br />
         /// 资源对象
         /// </summary>
-        T Value { get; }
+        object Value { get; }
     }
 }

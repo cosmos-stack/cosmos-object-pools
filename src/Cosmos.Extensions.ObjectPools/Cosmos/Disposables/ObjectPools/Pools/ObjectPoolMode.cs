@@ -1,9 +1,9 @@
-namespace Cosmos.Disposables.ObjectPools
+namespace Cosmos.Disposables.ObjectPools.Pools
 {
     /// <summary>
     /// Object pool mode
     /// </summary>
-    public enum ObjectPoolMode
+    internal enum ObjectPoolMode
     {
         /// <summary>
         /// Generic mode (default)

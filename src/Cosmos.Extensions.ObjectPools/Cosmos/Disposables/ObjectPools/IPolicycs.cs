@@ -6,7 +6,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// <summary>
     /// Interface for policy
     /// </summary>
-    public interface IPolicy : IPolicyCore<object, ObjectBox>
+    public interface IPolicy : IPolicyCore<object, ObjectCellSite>
     {
         /// <summary>
         /// Binding type<br />

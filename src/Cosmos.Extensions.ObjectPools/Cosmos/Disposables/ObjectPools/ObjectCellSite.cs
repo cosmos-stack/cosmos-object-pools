@@ -8,13 +8,13 @@ namespace Cosmos.Disposables.ObjectPools
     /// Non-generic recyclable resource objects.<br />
     /// 非泛型可回收资源对象
     /// </summary>
-    public class ObjectBox : ObjectBoxBase<object>, IObject
+    public class ObjectCellSite : ObjectCell<object>, IObjectCellSite
     {
         /// <inheritdoc />
-        public ObjectBox() { }
+        public ObjectCellSite() { }
 
-        internal ObjectBox(string internalId, DynamicObjectBox dynamicObjectBox)
-            : base(internalId, dynamicObjectBox) { }
+        internal ObjectCellSite(string internalId, DynamicObjectCell dynamicObjectCell)
+            : base(internalId, dynamicObjectCell) { }
 
         #region InitWith
 
@@ -26,9 +26,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static ObjectBox InitWith(IObjectPool pool, int id, object value)
+        public static ObjectCellSite InitWith(IObjectCellPool pool, int id, object value)
         {
-            return new ObjectBox
+            return new()
             {
                 Pool = pool,
                 Id = id,
@@ -44,11 +44,11 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="id"></param>
-        /// <param name="dynamicObjectBox"></param>
+        /// <param name="dynamicObjectCell"></param>
         /// <returns></returns>
-        public static ObjectBox InitWith(IObjectPool pool, int id, DynamicObjectBox dynamicObjectBox)
+        public static ObjectCellSite InitWith(IObjectCellPool pool, int id, DynamicObjectCell dynamicObjectCell)
         {
-            var ret = new ObjectBox
+            var ret = new ObjectCellSite
             {
                 Pool = pool,
                 Id = id,
@@ -56,7 +56,7 @@ namespace Cosmos.Disposables.ObjectPools
                 LastAcquiredTime = DateTime.Now
             };
 
-            ret.SetDynamicObjectOut(dynamicObjectBox);
+            ret.SetDynamicObjectOut(dynamicObjectCell);
 
             return ret;
         }
@@ -67,7 +67,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// Owning object pool<br />
         /// 所属对象池
         /// </summary>
-        public IObjectPool Pool { get; internal set; }
+        public IObjectCellPool Pool { get; internal set; }
 
         /// <inheritdoc />
         public override void Reset()
@@ -111,7 +111,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <inheritdoc />
         public override void Dispose()
         {
-            Pool?.Return(this);
+            Pool?.Recycle(this);
         }
     }
 }

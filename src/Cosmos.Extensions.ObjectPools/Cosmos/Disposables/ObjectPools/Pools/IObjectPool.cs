@@ -1,12 +1,12 @@
 using System;
 using Cosmos.Disposables.ObjectPools.Statistics;
 
-namespace Cosmos.Disposables.ObjectPools.Core
+namespace Cosmos.Disposables.ObjectPools.Pools
 {
     /// <summary>
     /// Interface for ObjectPool
     /// </summary>
-    public interface IObjectPoolCore<out TPolicy> : IDisposable
+    public interface IObjectPool<out TPolicy> : IDisposable
     {
         /// <summary>
         /// Gets policy

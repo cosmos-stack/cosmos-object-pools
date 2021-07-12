@@ -5,7 +5,7 @@ namespace Cosmos.Disposables.ObjectPools.Statistics
 {
     public struct ObjectBoxStatisticsInfo
     {
-        public ObjectBoxStatisticsInfo(
+        internal ObjectBoxStatisticsInfo(
             string objStrVal,
             long totalAcquiredTimes,
             int lastAcquiredThreadId,

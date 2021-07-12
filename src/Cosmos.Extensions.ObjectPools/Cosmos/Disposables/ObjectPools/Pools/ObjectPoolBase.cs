@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cosmos.Disposables.ObjectPools.Core;
 using Cosmos.Disposables.ObjectPools.Core.Display;
 using Cosmos.Disposables.ObjectPools.Statistics;
 
-namespace Cosmos.Disposables.ObjectPools.Core
+namespace Cosmos.Disposables.ObjectPools.Pools
 {
     /// <summary>
     /// Object pool base
     /// </summary>
-    public abstract class ObjectPoolBase<T, TPolicy, TObject> : IObjectPoolCore<TPolicy>
+    public abstract class ObjectPoolBase<T, TPolicy, TObject> : IObjectPool<TPolicy>
         where TPolicy : IPolicyCore<T, TObject>
-        where TObject : ObjectBoxBase<T>, IObjectBox, new()
+        where TObject : ObjectCell<T>, IObjectCell, new()
     {
         /// <summary>
         /// Create a new instance of <see cref="ObjectPoolBase{T, TPolicy, TObject}"/>.<br />
@@ -63,7 +64,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// <summary>
         /// Object pool mode
         /// </summary>
-        public abstract ObjectPoolMode Mode { get; }
+        internal abstract ObjectPoolMode Mode { get; }
 
         #region Available and unavailable
 
@@ -143,7 +144,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                         }
                         finally
                         {
-                            Return(conn);
+                            Recycle(conn);
                         }
                     }
                     catch (Exception ex)
@@ -207,7 +208,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 }
                 finally
                 {
-                    Return(conn);
+                    Recycle(conn);
                 }
             }
             catch
@@ -246,7 +247,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
         #endregion
 
-        #region Get or return
+        #region Get or Recycle
 
         /// <summary>
         /// A factory method of creating an instance of &lt;TObject&gt;
@@ -291,7 +292,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
                 }
                 catch
                 {
-                    Return(obj);
+                    Recycle(obj);
                     throw;
                 }
             }
@@ -307,7 +308,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// <param name="timeout"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public virtual TObject Get(TimeSpan? timeout = null)
+        public virtual TObject Acquire(TimeSpan? timeout = null)
         {
             // Get resources
             var obj = GetOrCreateFreeObject(true);
@@ -344,7 +345,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
                 if (obj is null)
                 {
-                    Policy.OnGetTimeout();
+                    Policy.OnAcquireTimeout();
 
                     if (Policy.IsThrowGetTimeoutException)
                         throw ExceptionHelper.ResourceAcquisitionTimeout(timeout.Value.TotalSeconds);
@@ -355,11 +356,11 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
             try
             {
-                Policy.OnGet(obj);
+                Policy.OnAcquire(obj);
             }
             catch
             {
-                Return(obj);
+                Recycle(obj);
                 throw;
             }
 
@@ -376,7 +377,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<TObject> GetAsync()
+        public async Task<TObject> AcquireAsync()
         {
             var obj = GetOrCreateFreeObject(true);
 
@@ -411,11 +412,11 @@ namespace Cosmos.Disposables.ObjectPools.Core
 
             try
             {
-                await Policy.OnGetAsync(obj);
+                await Policy.OnAcquireAsync(obj);
             }
             catch
             {
-                Return(obj);
+                Recycle(obj);
                 throw;
             }
 
@@ -432,7 +433,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// </summary>
         /// <param name="obj">对象</param>
         /// <param name="isReset">是否重新创建</param>
-        public virtual void Return(TObject obj, bool isReset = false)
+        public virtual void Recycle(TObject obj, bool isReset = false)
         {
             if (obj is null) return;
 
@@ -517,7 +518,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
             {
                 try
                 {
-                    Policy.OnReturn(obj);
+                    Policy.OnRecycle(obj);
                 }
                 finally
                 {

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Cosmos.Disposables.ObjectPools.Pools;
 
 namespace Cosmos.Disposables.ObjectPools.Statistics
 {
     public struct FullStatisticsInfo
     {
-        public FullStatisticsInfo(ObjectPoolMode mode, StatisticsInfo statistics, IEnumerable<ObjectBoxStatisticsInfo> objectBoxStatisticsInfos)
+        internal FullStatisticsInfo(ObjectPoolMode mode, StatisticsInfo statistics, IEnumerable<ObjectBoxStatisticsInfo> objectBoxStatisticsInfos)
         {
             Mode = mode;
             Statistics = statistics;

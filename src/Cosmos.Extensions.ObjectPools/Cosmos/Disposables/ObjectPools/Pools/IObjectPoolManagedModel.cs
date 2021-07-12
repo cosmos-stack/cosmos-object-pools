@@ -1,6 +1,6 @@
 using System;
 
-namespace Cosmos.Disposables.ObjectPools.Managed
+namespace Cosmos.Disposables.ObjectPools.Pools
 {
     /// <summary>
     /// Interface of object pool managed model
@@ -15,7 +15,7 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-        IObjectPool<T> GetDefaultTyped<T>();
+        IObjectCellPool<T> GetDefaultTyped<T>();
 
         /// <summary>
         /// To get the specified type of object pool.<br />
@@ -25,7 +25,7 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-        IObjectPool GetDefaultTyped(Type type);
+        IObjectCellPool GetDefaultTyped(Type type);
 
         /// <summary>
         /// To get the specified type and name of object pool.<br />
@@ -36,7 +36,7 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        IObjectPool<T> Get<T>(string name);
+        IObjectCellPool<T> Get<T>(string name);
 
         /// <summary>
         /// To get the specified type and name of object pool.<br />
@@ -47,7 +47,7 @@ namespace Cosmos.Disposables.ObjectPools.Managed
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        IObjectPool Get(Type type, string name);
+        IObjectCellPool Get(Type type, string name);
 
         /// <summary>
         /// Add or update

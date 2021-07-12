@@ -9,7 +9,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// <typeparam name="TObject"></typeparam>
     /// <typeparam name="T"></typeparam>
     public abstract class PolicyBase<T, TObject> : IPolicyCore<T, TObject>
-        where TObject : ObjectBoxBase<T>, IObjectBox
+        where TObject : ObjectCell<T>, IObjectCell
     {
         /// <inheritdoc />
         public string Name { get; set; }
@@ -42,7 +42,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         public void OnDestroy(T obj) { }
 
         /// <inheritdoc />
-        public void OnGetTimeout() { }
+        public void OnAcquireTimeout() { }
 
         /// <inheritdoc />
         public void OnAvailable() { }
@@ -51,13 +51,13 @@ namespace Cosmos.Disposables.ObjectPools.Core
         public void OnUnavailable() { }
 
         /// <inheritdoc />
-        public void OnGet(TObject obj) { }
+        public void OnAcquire(TObject obj) { }
 
         /// <inheritdoc />
-        public abstract Task OnGetAsync(TObject obj);
+        public abstract Task OnAcquireAsync(TObject obj);
 
         /// <inheritdoc />
-        public void OnReturn(TObject obj) { }
+        public void OnRecycle(TObject obj) { }
 
         /// <inheritdoc />
         public bool OnCheckAvailable(TObject obj) => true;

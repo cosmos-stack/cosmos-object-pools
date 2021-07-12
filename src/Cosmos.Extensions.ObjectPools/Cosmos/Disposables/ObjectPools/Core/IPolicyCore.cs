@@ -7,7 +7,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
     /// Interface for recyclable object policy
     /// </summary>
     public interface IPolicyCore<T, in TObject>
-        where TObject : ObjectBoxBase<T>, IObjectBox
+        where TObject : ObjectCell<T>, IObjectCell
     {
         /// <summary>
         /// Gets or sets name of policy<br />
@@ -65,19 +65,6 @@ namespace Cosmos.Disposables.ObjectPools.Core
          T OnCreate();
 
         /// <summary>
-        /// On destroy event<br />
-        /// 销毁对象
-        /// </summary>
-        /// <param name="obj">资源对象</param>
-        void OnDestroy(T obj);
-        
-        /// <summary>
-        /// On get timeout event<br />
-        /// 从对象池获取对象超时的时候触发，通过该方法统计
-        /// </summary>
-        void OnGetTimeout();
-
-        /// <summary>
         /// On available event<br />
         /// 事件：可用时触发
         /// </summary>
@@ -90,32 +77,45 @@ namespace Cosmos.Disposables.ObjectPools.Core
         void OnUnavailable();
 
         /// <summary>
-        /// On get event<br />
-        /// 从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
-        /// </summary>
-        /// <param name="obj">资源对象</param>
-        void OnGet(TObject obj);
-
-        /// <summary>
-        /// On get async event<br />
-        /// 从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
-        /// </summary>
-        /// <param name="obj">资源对象</param>
-        Task OnGetAsync(TObject obj);
-
-        /// <summary>
-        /// On return event<br />
-        /// 归还对象给对象池的时候触发
-        /// </summary>
-        /// <param name="obj">资源对象</param>
-        void OnReturn(TObject obj);
-
-        /// <summary>
         /// On check available event<br />
         /// 检查可用性
         /// </summary>
         /// <param name="obj">资源对象</param>
         /// <returns></returns>
         bool OnCheckAvailable(TObject obj);
+
+        /// <summary>
+        /// On get event<br />
+        /// 从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
+        /// </summary>
+        /// <param name="obj">资源对象</param>
+        void OnAcquire(TObject obj);
+
+        /// <summary>
+        /// On get async event<br />
+        /// 从对象池获取对象成功的时候触发，通过该方法统计或初始化对象
+        /// </summary>
+        /// <param name="obj">资源对象</param>
+        Task OnAcquireAsync(TObject obj);
+        
+        /// <summary>
+        /// On get timeout event<br />
+        /// 从对象池获取对象超时的时候触发，通过该方法统计
+        /// </summary>
+        void OnAcquireTimeout();
+
+        /// <summary>
+        /// On return event<br />
+        /// 归还对象给对象池的时候触发
+        /// </summary>
+        /// <param name="obj">资源对象</param>
+        void OnRecycle(TObject obj);
+
+        /// <summary>
+        /// On destroy event<br />
+        /// 销毁对象
+        /// </summary>
+        /// <param name="obj">资源对象</param>
+        void OnDestroy(T obj);
     }
 }
