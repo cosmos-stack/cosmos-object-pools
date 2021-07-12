@@ -1,7 +1,7 @@
 @echo off
 
 echo =======================================================================
-echo Cosmos.Extensions.ObjectPools
+echo Cosmos.ObjectPools
 echo =======================================================================
 
 ::go to parent folder
