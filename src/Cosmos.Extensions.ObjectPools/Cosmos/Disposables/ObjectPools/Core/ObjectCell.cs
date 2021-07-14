@@ -14,7 +14,7 @@ namespace Cosmos.Disposables.ObjectPools.Core
         /// </summary>
         protected ObjectCell()
         {
-            InternalIdentity = RandomNonceStrProvider.Create(32);
+            InternalIdentity = RandomNonceStrGenerator.Create(32);
         }
 
         /// <summary>
