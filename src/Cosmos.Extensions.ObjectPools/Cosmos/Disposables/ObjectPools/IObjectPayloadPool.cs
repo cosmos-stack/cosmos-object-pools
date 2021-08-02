@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Cosmos.Disposables.ObjectPools.Pools;
 
 namespace Cosmos.Disposables.ObjectPools
 {
     /// <summary>
-    /// Interface for generic ObjectPool
+    /// Interface for non-generic ObjectPool
     /// </summary>
-    public interface IObjectCellPool<T> : IObjectPool<IPolicy<T>>
+    public interface IObjectPayloadPool : IObjectPool<IPolicy>
     {
         /// <summary>
         /// Access to resources.<br />
@@ -15,14 +15,14 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="timeout">超时</param>
         /// <returns></returns>
-         ObjectCellSite<T> Acquire(TimeSpan? timeout = null);
+        ObjectPayload Acquire(TimeSpan? timeout = null);
 
         /// <summary>
         /// Access to resources async.<br />
         /// 获取资源
         /// </summary>
         /// <returns></returns>
-         Task<ObjectCellSite<T>> AcquireAsync();
+        Task<ObjectPayload> AcquireAsync();
 
         /// <summary>
         /// Return the resource after use.<br />
@@ -30,6 +30,6 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="obj">对象</param>
         /// <param name="isReset">是否重新创建</param>
-        void Recycle(ObjectCellSite<T> obj, bool isReset = false);
+        void Recycle(ObjectPayload obj, bool isReset = false);
     }
 }

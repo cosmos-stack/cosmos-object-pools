@@ -48,7 +48,7 @@ namespace Samples.BasicSample.NonGeneric
 
         private static SampleModel CreateObject() => new SampleModel();
 
-        private static void OnGetObject(ObjectCellSite model)
+        private static void OnGetObject(ObjectPayload model)
         {
             if (DateTime.Now.Subtract(model.LastAcquiredTime).TotalSeconds > 3)
             {

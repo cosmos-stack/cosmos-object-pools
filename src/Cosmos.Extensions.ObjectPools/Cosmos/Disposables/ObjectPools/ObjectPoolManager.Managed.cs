@@ -147,7 +147,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="InvalidOperationException"> Unknown type.</exception>
             /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-            public static IObjectCellPool<T> Get<T, TManagedModel>() where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Get<T, TManagedModel>() where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
                 return model.GetDefaultTyped<T>();
@@ -163,7 +163,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
             /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-            public static IObjectCellPool<T> Get<T, TManagedModel>(string name) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Get<T, TManagedModel>(string name) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
                 return model.Get<T>(name);
@@ -178,7 +178,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="InvalidOperationException"> Unknown type.</exception>
             /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-            public static IObjectCellPool Get(Type managedModelType, Type type)
+            public static IObjectPayloadPool Get(Type managedModelType, Type type)
             {
                 var model = ResolveModel(managedModelType);
                 return model.GetDefaultTyped(type);
@@ -194,7 +194,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
             /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-            public static IObjectCellPool Get(Type managedModelType, Type type, string name)
+            public static IObjectPayloadPool Get(Type managedModelType, Type type, string name)
             {
                 var model = ResolveModel(managedModelType);
                 return model.Get(type, name);
@@ -213,7 +213,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
@@ -240,7 +240,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
@@ -266,7 +266,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
             {
                 if (policy is null)
                     throw new ArgumentNullException(nameof(policy));
@@ -293,7 +293,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(IObjectCellPool<T> pool) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(IObjectPayloadPool<T> pool) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -319,7 +319,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(Func<IObjectCellPool<T>> poolFunc) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(Func<IObjectPayloadPool<T>> poolFunc) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -347,7 +347,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(string name, IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(string name, IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -375,7 +375,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(string name, IObjectCellPool<T> pool) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(string name, IObjectPayloadPool<T> pool) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -402,7 +402,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool<T> Create<T, TManagedModel>(string name, Func<IObjectCellPool<T>> poolFunc) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> Create<T, TManagedModel>(string name, Func<IObjectPayloadPool<T>> poolFunc) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -429,7 +429,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectCellPool Create(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+            public static IObjectPayloadPool Create(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -453,7 +453,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectCellPool Create(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+            public static IObjectPayloadPool Create(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -476,7 +476,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="managedModelType"></param>
             /// <param name="policy"></param>
             /// <returns></returns>
-            public static IObjectCellPool Create(Type managedModelType, IPolicy policy)
+            public static IObjectPayloadPool Create(Type managedModelType, IPolicy policy)
             {
                 if (policy is null)
                     throw new ArgumentNullException(nameof(policy));
@@ -502,7 +502,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool Create(Type managedModelType, IObjectCellPool pool)
+            public static IObjectPayloadPool Create(Type managedModelType, IObjectPayloadPool pool)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -528,7 +528,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static IObjectCellPool Create(Type managedModelType, Func<IObjectCellPool> poolFunc)
+            public static IObjectPayloadPool Create(Type managedModelType, Func<IObjectPayloadPool> poolFunc)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -553,7 +553,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="name"></param>
             /// <param name="policy"></param>
             /// <returns></returns>
-            public static IObjectCellPool Create(Type managedModelType, string name, IPolicy policy)
+            public static IObjectPayloadPool Create(Type managedModelType, string name, IPolicy policy)
             {
                 if (policy is null)
                     throw new ArgumentNullException(nameof(policy));
@@ -580,7 +580,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
-            public static IObjectCellPool Create(Type managedModelType, string name, IObjectCellPool pool)
+            public static IObjectPayloadPool Create(Type managedModelType, string name, IObjectPayloadPool pool)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -607,7 +607,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <exception cref="ArgumentNullException"></exception>
             /// <exception cref="ArgumentException"></exception>
             // ReSharper disable once MemberHidesStaticFromOuterClass
-            public static IObjectCellPool Create(Type managedModelType, string name, Func<IObjectCellPool> poolFunc)
+            public static IObjectPayloadPool Create(Type managedModelType, string name, Func<IObjectPayloadPool> poolFunc)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -638,7 +638,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectCellPool<T> GetOrCreate<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+            public static IObjectPayloadPool<T> GetOrCreate<T, TManagedModel>(int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
@@ -654,7 +654,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectCellPool<T> GetOrCreate<T, TManagedModel>(IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> GetOrCreate<T, TManagedModel>(IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
                 return model.ContainsDefaultTyped(typeof(T))
@@ -670,7 +670,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
-            public static IObjectCellPool<T> GetOrCreate<T, TManagedModel>(Func<IObjectCellPool<T>> insteadOfFactory) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> GetOrCreate<T, TManagedModel>(Func<IObjectPayloadPool<T>> insteadOfFactory) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -697,7 +697,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectCellPool<T> GetOrCreate<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+            public static IObjectPayloadPool<T> GetOrCreate<T, TManagedModel>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
                 where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
@@ -714,7 +714,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="T"></typeparam>
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
-            public static IObjectCellPool<T> GetOrCreate<T, TManagedModel>(string name, IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> GetOrCreate<T, TManagedModel>(string name, IPolicy<T> policy) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
                 return model.Contains(typeof(T), name)
@@ -731,7 +731,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <typeparam name="TManagedModel"></typeparam>
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
-            public static IObjectCellPool<T> GetOrCreate<T, TManagedModel>(string name, Func<IObjectCellPool<T>> insteadOfFactory) where TManagedModel : class, IObjectPoolManagedModel
+            public static IObjectPayloadPool<T> GetOrCreate<T, TManagedModel>(string name, Func<IObjectPayloadPool<T>> insteadOfFactory) where TManagedModel : class, IObjectPoolManagedModel
             {
                 var model = ResolveModel<TManagedModel>();
 
@@ -757,7 +757,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectCellPool GetOrCreate(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+            public static IObjectPayloadPool GetOrCreate(Type managedModelType, Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
             {
                 var model = ResolveModel(managedModelType);
                 return model.ContainsDefaultTyped(type)
@@ -772,7 +772,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="type"></param>
             /// <param name="policy"></param>
             /// <returns></returns>
-            public static IObjectCellPool GetOrCreate(Type managedModelType, Type type, IPolicy policy)
+            public static IObjectPayloadPool GetOrCreate(Type managedModelType, Type type, IPolicy policy)
             {
                 var model = ResolveModel(managedModelType);
                 return model.ContainsDefaultTyped(type)
@@ -788,7 +788,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="managedModelType"></param>
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
-            public static IObjectCellPool GetOrCreate(Type managedModelType, Type type, Func<IObjectCellPool> insteadOfFactory)
+            public static IObjectPayloadPool GetOrCreate(Type managedModelType, Type type, Func<IObjectPayloadPool> insteadOfFactory)
             {
                 var model = ResolveModel(managedModelType);
 
@@ -815,8 +815,8 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="getObjectHandler"></param>
             /// <param name="managedModelType"></param>
             /// <returns></returns>
-            public static IObjectCellPool GetOrCreate(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc,
-                Action<ObjectCellSite> getObjectHandler = null)
+            public static IObjectPayloadPool GetOrCreate(Type managedModelType, Type type, string name, int poolSize, Func<object> createObjectFunc,
+                Action<ObjectPayload> getObjectHandler = null)
             {
                 var model = ResolveModel(managedModelType);
                 return model.Contains(type, name)
@@ -832,7 +832,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="name"></param>
             /// <param name="policy"></param>
             /// <returns></returns>
-            public static IObjectCellPool GetOrCreate(Type managedModelType, Type type, string name, IPolicy policy)
+            public static IObjectPayloadPool GetOrCreate(Type managedModelType, Type type, string name, IPolicy policy)
             {
                 var model = ResolveModel(managedModelType);
                 return model.Contains(type, name)
@@ -849,7 +849,7 @@ namespace Cosmos.Disposables.ObjectPools
             /// <param name="managedModelType"></param>
             /// <returns></returns>
             /// <exception cref="ArgumentNullException"></exception>
-            public static IObjectCellPool GetOrCreate(Type managedModelType, Type type, string name, Func<IObjectCellPool> insteadOfFactory)
+            public static IObjectPayloadPool GetOrCreate(Type managedModelType, Type type, string name, Func<IObjectPayloadPool> insteadOfFactory)
             {
                 var model = ResolveModel(managedModelType);
 

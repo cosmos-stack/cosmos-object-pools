@@ -10,12 +10,12 @@ namespace Cosmos.Disposables.ObjectPools
     /// 可回收资源对象
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ObjectCellSite<T> : ObjectCell<T>, IObjectCellSite<T>
+    public class ObjectPayload<T> : ObjectCell<T>, IObjectPayload<T>
     {
         /// <inheritdoc />
-        public ObjectCellSite() { }
+        public ObjectPayload() { }
 
-        internal ObjectCellSite(string internalId, DynamicObjectCell dynamicObjectCell)
+        internal ObjectPayload(string internalId, DynamicObjectCell dynamicObjectCell)
             : base(internalId, dynamicObjectCell) { }
 
         #region InitWith
@@ -28,7 +28,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static ObjectCellSite<T> InitWith(IObjectCellPool<T> pool, int id, T value)
+        public static ObjectPayload<T> InitWith(IObjectPayloadPool<T> pool, int id, T value)
         {
             return new()
             {
@@ -48,9 +48,9 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="id"></param>
         /// <param name="dynamicObjectCell"></param>
         /// <returns></returns>
-        public static ObjectCellSite<T> InitWith(IObjectCellPool<T> pool, int id, DynamicObjectCell dynamicObjectCell)
+        public static ObjectPayload<T> InitWith(IObjectPayloadPool<T> pool, int id, DynamicObjectCell dynamicObjectCell)
         {
-            var ret = new ObjectCellSite<T>
+            var ret = new ObjectPayload<T>
             {
                 Pool = pool,
                 Id = id,
@@ -69,7 +69,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// Owning object pool<br />
         /// 所属对象池
         /// </summary>
-        public IObjectCellPool<T> Pool { get; internal set; }
+        public IObjectPayloadPool<T> Pool { get; internal set; }
 
         /// <inheritdoc />
         public override void Reset()

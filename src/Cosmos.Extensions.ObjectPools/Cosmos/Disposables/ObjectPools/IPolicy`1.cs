@@ -6,5 +6,5 @@ namespace Cosmos.Disposables.ObjectPools
     /// Interface for policy
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IPolicy<T> : IPolicyCore<T, ObjectCellSite<T>> { }
+    public interface IPolicy<T> : IPolicyCore<T, ObjectPayload<T>> { }
 }

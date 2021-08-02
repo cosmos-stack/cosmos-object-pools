@@ -46,14 +46,8 @@ namespace Cosmos.Disposables.ObjectPools.Statistics
             return builder;
         }
 
-        public StringBuilder ToStringBuilder()
-        {
-            return ToStringBuilder(new());
-        }
+        public StringBuilder ToStringBuilder() => ToStringBuilder(new());
 
-        public override string ToString()
-        {
-            return ToStringBuilder().ToString();
-        }
+        public override string ToString() => ToStringBuilder().ToString();
     }
 }

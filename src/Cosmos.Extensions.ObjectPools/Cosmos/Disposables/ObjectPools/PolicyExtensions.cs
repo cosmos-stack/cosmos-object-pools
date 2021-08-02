@@ -42,7 +42,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static bool TryRegister<T>(this IPolicy<T> policy, out IObjectCellPool<T> pool)
+        public static bool TryRegister<T>(this IPolicy<T> policy, out IObjectPayloadPool<T> pool)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="pool"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static bool TryRegister(this IPolicy policy, out IObjectCellPool pool)
+        public static bool TryRegister(this IPolicy policy, out IObjectPayloadPool pool)
         {
             try
             {

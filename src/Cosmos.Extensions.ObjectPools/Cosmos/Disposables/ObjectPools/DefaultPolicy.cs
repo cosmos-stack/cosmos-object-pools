@@ -9,7 +9,7 @@ namespace Cosmos.Disposables.ObjectPools
     /// <summary>
     /// Default policy
     /// </summary>
-    public class DefaultPolicy : PolicyBase<object, ObjectCellSite>, IPolicy
+    public class DefaultPolicy : PolicyBase<object, ObjectPayload>, IPolicy
     {
         /// <summary>
         /// Create a new instance of <see cref="DefaultPolicy"/>.
@@ -31,13 +31,13 @@ namespace Cosmos.Disposables.ObjectPools
         /// <summary>
         /// On get object
         /// </summary>
-        public Action<ObjectCellSite> OnGetObject;
+        public Action<ObjectPayload> OnGetObject;
 
         /// <inheritdoc />
         public override object OnCreate() => CreateObject();
 
         /// <inheritdoc />
-        public override Task OnAcquireAsync(ObjectCellSite obj)
+        public override Task OnAcquireAsync(ObjectPayload obj)
         {
             OnGetObject?.Invoke(obj);
             return Tasks.CompletedTask();

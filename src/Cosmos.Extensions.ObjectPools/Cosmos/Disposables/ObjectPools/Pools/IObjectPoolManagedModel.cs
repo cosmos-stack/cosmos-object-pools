@@ -15,7 +15,7 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-        IObjectCellPool<T> GetDefaultTyped<T>();
+        IObjectPayloadPool<T> GetDefaultTyped<T>();
 
         /// <summary>
         /// To get the specified type of object pool.<br />
@@ -25,7 +25,7 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-        IObjectCellPool GetDefaultTyped(Type type);
+        IObjectPayloadPool GetDefaultTyped(Type type);
 
         /// <summary>
         /// To get the specified type and name of object pool.<br />
@@ -36,7 +36,7 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        IObjectCellPool<T> Get<T>(string name);
+        IObjectPayloadPool<T> Get<T>(string name);
 
         /// <summary>
         /// To get the specified type and name of object pool.<br />
@@ -47,7 +47,7 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        IObjectCellPool Get(Type type, string name);
+        IObjectPayloadPool Get(Type type, string name);
 
         /// <summary>
         /// Add or update

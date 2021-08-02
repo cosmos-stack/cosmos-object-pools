@@ -28,7 +28,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type of object pool.</exception>
-        public static IObjectCellPool<T> Get<T>()
+        public static IObjectPayloadPool<T> Get<T>()
         {
             return _defaultManagedModel.GetDefaultTyped<T>();
         }
@@ -42,7 +42,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        public static IObjectCellPool<T> Get<T>(string name)
+        public static IObjectPayloadPool<T> Get<T>(string name)
         {
             return _defaultManagedModel.Get<T>(name);
         }
@@ -53,7 +53,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static IObjectCellPool Get(Type type)
+        public static IObjectPayloadPool Get(Type type)
         {
             return _defaultManagedModel.GetDefaultTyped(type);
         }
@@ -67,7 +67,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"> Unknown type or name.</exception>
         /// <exception cref="ArgumentException">Unable to get the specified type and name of object pool.</exception>
-        public static IObjectCellPool Get(Type type, string name)
+        public static IObjectPayloadPool Get(Type type, string name)
         {
             return _defaultManagedModel.Get(type, name);
         }
@@ -84,7 +84,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectCellPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+        public static IObjectPayloadPool<T> Create<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
         {
             if (Contains<T>())
                 throw new ArgumentException("The specified type of object pool is exist.");
@@ -107,7 +107,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+        public static IObjectPayloadPool<T> Create<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = DefaultName;
@@ -129,7 +129,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="policy"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectCellPool<T> Create<T>(IPolicy<T> policy)
+        public static IObjectPayloadPool<T> Create<T>(IPolicy<T> policy)
         {
             if (policy is null)
                 throw new ArgumentNullException(nameof(policy));
@@ -153,7 +153,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool<T> Create<T>(IObjectCellPool<T> pool)
+        public static IObjectPayloadPool<T> Create<T>(IObjectPayloadPool<T> pool)
         {
             if (pool is null)
                 throw new ArgumentNullException(nameof(pool));
@@ -176,7 +176,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool<T> Create<T>(Func<IObjectCellPool<T>> poolFunc)
+        public static IObjectPayloadPool<T> Create<T>(Func<IObjectPayloadPool<T>> poolFunc)
         {
             if (poolFunc is null)
                 throw new ArgumentNullException(nameof(poolFunc));
@@ -200,7 +200,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool<T> Create<T>(string name, IPolicy<T> policy)
+        public static IObjectPayloadPool<T> Create<T>(string name, IPolicy<T> policy)
         {
             if (policy is null)
                 throw new ArgumentNullException(nameof(policy));
@@ -228,7 +228,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool<T> Create<T>(string name, IObjectCellPool<T> pool)
+        public static IObjectPayloadPool<T> Create<T>(string name, IObjectPayloadPool<T> pool)
         {
             if (pool is null)
                 throw new ArgumentNullException(nameof(pool));
@@ -252,7 +252,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool<T> Create<T>(string name, Func<IObjectCellPool<T>> poolFunc)
+        public static IObjectPayloadPool<T> Create<T>(string name, Func<IObjectPayloadPool<T>> poolFunc)
         {
             if (poolFunc is null)
                 throw new ArgumentNullException(nameof(poolFunc));
@@ -276,7 +276,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="createObjectFunc"></param>
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
-        public static IObjectCellPool Create(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+        public static IObjectPayloadPool Create(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
         {
             if (Contains(type))
                 throw new ArgumentException("The specified type of object pool is exist.");
@@ -298,7 +298,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool Create(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+        public static IObjectPayloadPool Create(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = DefaultName;
@@ -318,7 +318,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="policy"></param>
         /// <returns></returns>
-        public static IObjectCellPool Create(IPolicy policy)
+        public static IObjectPayloadPool Create(IPolicy policy)
         {
             if (policy is null)
                 throw new ArgumentNullException(nameof(policy));
@@ -340,7 +340,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool Create(IObjectCellPool pool)
+        public static IObjectPayloadPool Create(IObjectPayloadPool pool)
         {
             if (pool is null)
                 throw new ArgumentNullException(nameof(pool));
@@ -361,7 +361,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool Create(Type type, Func<IObjectCellPool> poolFunc)
+        public static IObjectPayloadPool Create(Type type, Func<IObjectPayloadPool> poolFunc)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -386,7 +386,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="policy"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool Create(string name, IPolicy policy)
+        public static IObjectPayloadPool Create(string name, IPolicy policy)
         {
             if (policy is null)
                 throw new ArgumentNullException(nameof(policy));
@@ -412,7 +412,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool Create(string name, IObjectCellPool pool)
+        public static IObjectPayloadPool Create(string name, IObjectPayloadPool pool)
         {
             if (pool is null)
                 throw new ArgumentNullException(nameof(pool));
@@ -434,7 +434,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static IObjectCellPool Create(Type type, string name, Func<IObjectCellPool> poolFunc)
+        public static IObjectPayloadPool Create(Type type, string name, Func<IObjectPayloadPool> poolFunc)
         {
             if (poolFunc is null)
                 throw new ArgumentNullException(nameof(poolFunc));
@@ -461,7 +461,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectCellPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+        public static IObjectPayloadPool<T> GetOrCreate<T>(int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
         {
             return Contains<T>() ? Get<T>() : Create(poolSize, createObjectFunc, getObjectHandler);
         }
@@ -472,7 +472,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="policy"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectCellPool<T> GetOrCreate<T>(IPolicy<T> policy)
+        public static IObjectPayloadPool<T> GetOrCreate<T>(IPolicy<T> policy)
         {
             return Contains<T>() ? Get<T>() : Create(policy);
         }
@@ -484,7 +484,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static IObjectCellPool<T> GetOrCreate<T>(Func<IObjectCellPool<T>> insteadOfFactory)
+        public static IObjectPayloadPool<T> GetOrCreate<T>(Func<IObjectPayloadPool<T>> insteadOfFactory)
         {
             if (insteadOfFactory is null)
                 throw new ArgumentNullException(nameof(insteadOfFactory));
@@ -508,7 +508,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="getObjectHandler"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectCellPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectCellSite<T>> getObjectHandler = null)
+        public static IObjectPayloadPool<T> GetOrCreate<T>(string name, int poolSize, Func<T> createObjectFunc, Action<ObjectPayload<T>> getObjectHandler = null)
         {
             return Contains<T>(name) ? Get<T>(name) : Create(name, poolSize, createObjectFunc, getObjectHandler);
         }
@@ -520,7 +520,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="policy"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IObjectCellPool<T> GetOrCreate<T>(string name, IPolicy<T> policy)
+        public static IObjectPayloadPool<T> GetOrCreate<T>(string name, IPolicy<T> policy)
         {
             return Contains<T>(name) ? Get<T>(name) : Create(name, policy);
         }
@@ -533,7 +533,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static IObjectCellPool<T> GetOrCreate<T>(string name, Func<IObjectCellPool<T>> insteadOfFactory)
+        public static IObjectPayloadPool<T> GetOrCreate<T>(string name, Func<IObjectPayloadPool<T>> insteadOfFactory)
         {
             if (insteadOfFactory is null)
                 throw new ArgumentNullException(nameof(insteadOfFactory));
@@ -556,7 +556,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="createObjectFunc"></param>
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
-        public static IObjectCellPool GetOrCreate(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+        public static IObjectPayloadPool GetOrCreate(Type type, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
         {
             return Contains(type) ? Get(type) : Create(type, poolSize, createObjectFunc, getObjectHandler);
         }
@@ -566,7 +566,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// </summary>
         /// <param name="policy"></param>
         /// <returns></returns>
-        public static IObjectCellPool GetOrCreate(IPolicy policy)
+        public static IObjectPayloadPool GetOrCreate(IPolicy policy)
         {
             if (policy is null)
                 throw new ArgumentNullException(nameof(policy));
@@ -580,7 +580,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="insteadOfFactory"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static IObjectCellPool GetOrCreate(Type type, Func<IObjectCellPool> insteadOfFactory)
+        public static IObjectPayloadPool GetOrCreate(Type type, Func<IObjectPayloadPool> insteadOfFactory)
         {
             if (insteadOfFactory is null)
                 throw new ArgumentNullException(nameof(insteadOfFactory));
@@ -604,7 +604,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="createObjectFunc"></param>
         /// <param name="getObjectHandler"></param>
         /// <returns></returns>
-        public static IObjectCellPool GetOrCreate(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectCellSite> getObjectHandler = null)
+        public static IObjectPayloadPool GetOrCreate(Type type, string name, int poolSize, Func<object> createObjectFunc, Action<ObjectPayload> getObjectHandler = null)
         {
             return Contains(type, name) ? Get(type, name) : Create(type, name, poolSize, createObjectFunc, getObjectHandler);
         }
@@ -615,7 +615,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="name"></param>
         /// <param name="policy"></param>
         /// <returns></returns>
-        public static IObjectCellPool GetOrCreate(string name, IPolicy policy)
+        public static IObjectPayloadPool GetOrCreate(string name, IPolicy policy)
         {
             if (policy is null)
                 throw new ArgumentNullException(nameof(policy));
@@ -630,7 +630,7 @@ namespace Cosmos.Disposables.ObjectPools
         /// <param name="insteadOfFactory"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static IObjectCellPool GetOrCreate(Type type, string name, Func<IObjectCellPool> insteadOfFactory)
+        public static IObjectPayloadPool GetOrCreate(Type type, string name, Func<IObjectPayloadPool> insteadOfFactory)
         {
             if (insteadOfFactory is null)
                 throw new ArgumentNullException(nameof(insteadOfFactory));

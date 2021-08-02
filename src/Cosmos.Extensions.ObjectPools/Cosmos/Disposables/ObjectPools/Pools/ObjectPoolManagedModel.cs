@@ -25,12 +25,12 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         }
 
         /// <inheritdoc />
-        public IObjectCellPool<T> GetDefaultTyped<T>()
+        public IObjectPayloadPool<T> GetDefaultTyped<T>()
         {
             if (_defaultTypedObjectPools.TryGetValue(typeof(T), out var mid))
-                if (mid is IObjectCellPool<T> pool)
+                if (mid is IObjectPayloadPool<T> pool)
                     return pool;
-                else if (mid is IObjectCellPool)
+                else if (mid is IObjectPayloadPool)
                     throw new ArgumentException("Use the non-generic version of 'GetDefaultTyped' method.");
                 else
                     throw new InvalidOperationException($"Unknown type: {typeof(T)}");
@@ -38,10 +38,10 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         }
 
         /// <inheritdoc />
-        public IObjectCellPool GetDefaultTyped(Type type)
+        public IObjectPayloadPool GetDefaultTyped(Type type)
         {
             if (_defaultTypedObjectPools.TryGetValue(type, out var mid))
-                if (mid is IObjectCellPool pool)
+                if (mid is IObjectPayloadPool pool)
                     return pool;
                 else
                     throw new InvalidOperationException($"Unknown type: {type}");
@@ -49,12 +49,12 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         }
 
         /// <inheritdoc />
-        public IObjectCellPool<T> Get<T>(string name)
+        public IObjectPayloadPool<T> Get<T>(string name)
         {
             if (_namedTypedObjectPools.TryGetValue((typeof(T), name), out var mid))
-                if (mid is IObjectCellPool<T> pool)
+                if (mid is IObjectPayloadPool<T> pool)
                     return pool;
-                else if (mid is IObjectCellPool)
+                else if (mid is IObjectPayloadPool)
                     throw new ArgumentException("Use the non-generic version of 'GetDefaultTyped' method.");
                 else
                     throw new InvalidOperationException($"Unknown type ('{typeof(T)}') or name ('{name}').");
@@ -62,10 +62,10 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         }
 
         /// <inheritdoc />
-        public IObjectCellPool Get(Type type, string name)
+        public IObjectPayloadPool Get(Type type, string name)
         {
             if (_namedTypedObjectPools.TryGetValue((type, name), out var mid))
-                if (mid is IObjectCellPool pool)
+                if (mid is IObjectPayloadPool pool)
                     return pool;
                 else
                     throw new InvalidOperationException($"Unknown type ('{type}') or name ('{name}').");
