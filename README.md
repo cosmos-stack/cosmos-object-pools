@@ -1,4 +1,4 @@
-# COSMOSLOOPS/ObjectPools
+# Cosmos ObjectPools Overview
 
 The object pool is used to manage the creation, acquisition and release of object resources.
 
@@ -6,11 +6,23 @@ This project is based on https://github.com/2881099/SafeObjectPool with some cha
 
 ---
 
-## Install
+## Installation
 
+Install via NuGet (Package Manager):
 
+```shell
+Install-Package Cosmos.Extensions.ObjectPools
+```
 
+or modify the `.csproj` file:
 
+```xml
+<PackageReference Include="Cosmos.Extensions.ObjectPools" Version="LATEST_VERSION" />
+```
+
+Fill in the latest version number in `LATEST_VERSION`.
+
+---
 
 ## Thanks
 
