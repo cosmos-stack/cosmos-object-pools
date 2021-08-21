@@ -85,7 +85,7 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         {
             var hasSet = false;
 
-            if (exception != null && UnavailableException is null)
+            if (exception is not null && UnavailableException is null)
             {
                 lock (_unavailableLockObj)
                 {
@@ -116,12 +116,12 @@ namespace Cosmos.Disposables.ObjectPools.Pools
         {
             new Thread(() =>
             {
-                if (UnavailableException != null)
+                if (UnavailableException is not null)
                 {
                     ConsoleWriter.Unavailable($"【{Policy.Name}】恢复检查时间：{DateTime.Now.AddSeconds(interval)}");
                 }
 
-                while (UnavailableException != null)
+                while (UnavailableException is not null)
                 {
                     if (_running == false) return;
 
@@ -277,14 +277,14 @@ namespace Cosmos.Disposables.ObjectPools.Pools
             }
 
             // If the resource object is not empty at this time, it is marked as unreturned. Prepare to lend the resource.
-            if (obj != null)
+            if (obj is not null)
                 obj._isRecycled = false;
 
             // If the resource object is not empty at this time, but the value is empty (indicating that it has been Disposed);
             // or the resource object is not empty, but the idle time exceeds the value configured by the policy,
             // it will be reset.
-            if (obj != null && obj.Value is null ||
-                obj != null && Policy.IdleTimeout > TimeSpan.Zero && DateTime.Now.Subtract(obj.LastRecycledTime) > Policy.IdleTimeout)
+            if (obj is not null && obj.Value is null ||
+                obj is not null && Policy.IdleTimeout > TimeSpan.Zero && DateTime.Now.Subtract(obj.LastRecycledTime) > Policy.IdleTimeout)
             {
                 try
                 {

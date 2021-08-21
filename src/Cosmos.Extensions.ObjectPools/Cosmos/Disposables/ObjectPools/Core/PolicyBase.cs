@@ -39,27 +39,27 @@ namespace Cosmos.Disposables.ObjectPools.Core
         public abstract T OnCreate();
 
         /// <inheritdoc />
-        public void OnDestroy(T obj) { }
+        public virtual void OnDestroy(T obj) { }
 
         /// <inheritdoc />
-        public void OnAcquireTimeout() { }
+        public virtual void OnAcquireTimeout() { }
 
         /// <inheritdoc />
-        public void OnAvailable() { }
+        public virtual void OnAvailable() { }
 
         /// <inheritdoc />
-        public void OnUnavailable() { }
+        public virtual void OnUnavailable() { }
 
         /// <inheritdoc />
-        public void OnAcquire(TObject obj) { }
+        public virtual void OnAcquire(TObject obj) { }
 
         /// <inheritdoc />
         public abstract Task OnAcquireAsync(TObject obj);
 
         /// <inheritdoc />
-        public void OnRecycle(TObject obj) { }
+        public virtual void OnRecycle(TObject obj) { }
 
         /// <inheritdoc />
-        public bool OnCheckAvailable(TObject obj) => true;
+        public virtual bool OnCheckAvailable(TObject obj) => true;
     }
 }
