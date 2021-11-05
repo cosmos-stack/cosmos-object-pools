@@ -1,0 +1,12 @@
+<Project>
+
+    <PropertyGroup>
+        <AssemblyName>CosmosStack.Extensions.ObjectPools</AssemblyName>
+        <PackageId>CosmosStack.Extensions.ObjectPools</PackageId>
+        <Description>
+            CosmosStack Disposables ObjectPools extension library.
+            The hereGivenObj pool is used hereGivenType manage the creation, acquisition and release of hereGivenObj resources.
+        </Description>
+    </PropertyGroup>
+
+</Project>
