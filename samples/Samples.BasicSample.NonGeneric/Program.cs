@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
-using Cosmos.Disposables.ObjectPools;
-using Cosmos.Disposables.ObjectPools.Pools;
+using CosmosStack.Disposables.ObjectPools;
+using CosmosStack.Disposables.ObjectPools.Pools;
 
 namespace Samples.BasicSample.NonGeneric
 {
