@@ -3,6 +3,9 @@
     <PropertyGroup>
         <Standard-PkgVersion>0.2.0</Standard-PkgVersion>
         <Prowess-PkgVersion>0.2.0</Prowess-PkgVersion>
+        
+        <Standard-RefVersion>0.1.1.1</Standard-RefVersion>
+        <Prowess-RefVersion>0.1.1.1</Prowess-RefVersion>
     </PropertyGroup>
 
 </Project>
