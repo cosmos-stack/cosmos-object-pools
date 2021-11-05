@@ -1,7 +1,7 @@
 @echo off
 
 echo =======================================================================
-echo Cosmos.ObjectPools
+echo CosmosStack.ObjectPools
 echo =======================================================================
 
 ::go to parent folder
@@ -21,7 +21,7 @@ echo Cleaned up all nuget packages.
 echo.
 
 ::start to package all projects
-dotnet pack src/Cosmos.Extensions.ObjectPools/Cosmos.Extensions.ObjectPools.csproj -c Release -o nuget_packages --no-restore
+dotnet pack src/CosmosStack.Extensions.ObjectPools -c Release -o nuget_packages --no-restore
 
 for /R "nuget_packages" %%s in (*symbols.nupkg) do (
     del "%%s"
@@ -37,4 +37,4 @@ for /R "nuget_packages" %%s in (*.nupkg) do (
 )
 
 ::get back to build folder
-cd build
+cd scripts
