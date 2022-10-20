@@ -1,12 +1,19 @@
 <Project>
-	<PropertyGroup Label="Package">
-		<Product>CosmosStack.ObjectPools</Product>
-		<Authors>AlexLEWIS;CosmosStack</Authors>
-		<RepositoryUrl>https://github.com/cosmos-stack/cosmos-objectpools</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/cosmos-stack/cosmos-objectpools</PackageProjectUrl>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageTags>CosmosStack;CosmosComponents;ObjectPools;Framework</PackageTags>
-	</PropertyGroup>
+
+    <PropertyGroup Label="Package">
+        <Product>CosmosStack.ObjectPools</Product>
+        <Authors>AlexLEWIS;CosmosStack</Authors>
+        <RepositoryUrl>https://github.com/cosmos-stack/cosmos-objectpools</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageProjectUrl>https://github.com/cosmos-stack/cosmos-objectpools</PackageProjectUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageTags>CosmosStack;CosmosComponents;ObjectPools;Framework</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
 </Project>

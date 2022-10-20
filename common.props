@@ -1,7 +1,7 @@
 <Project>
 
     <PropertyGroup>
-        <TargetFrameworks>net5.0;netcoreapp3.1;net48;net472;net462;net452</TargetFrameworks>
+        <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net48;net472;net462;net452</TargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -15,6 +15,10 @@
         <DocumentationFile>$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
 
+    <Import Project="asset/props/target.feature.props"/>
+
+    <Import Project="asset/props/sourcelink.env.props"/>
+
     <Import Project="asset/props/package.props"/>
 
     <Import Project="asset/props/misc.props"/>
@@ -22,10 +26,5 @@
     <Import Project="asset/version.props"/>
 
     <Import Project="asset/version.dev.props"/>
-
-    <ItemGroup>
-        <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All"/>
-        <PackageReference Include="DotNetCore.SourceLink.Environment" Version="2.2.0" />
-    </ItemGroup>
 
 </Project>
